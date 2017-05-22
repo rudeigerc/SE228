@@ -5,4 +5,23 @@
         "http://struts.apache.org/dtds/struts-2.5.dtd">
 
 <struts>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.objectFactory" value="spring" />
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.convention.classes.reload" value="true" />
+    <package name="process" extends="struts-default">
+        <!-- User -->
+        <action name="user" class="bookstore.action.user.ListUserAction">
+            <result name="success">user.jsp</result>
+        </action>
+        <action name="addUser" class="bookstore.action.user.AddUserAction">
+            <result name="success">user.jsp</result>
+        </action>
+        <action name="updateUser" class="bookstore.action.user.UpdateUserAction">
+            <result name="success">user.jsp</result>
+        </action>
+        <action name="deleteUser" class="bookstore.action.user.DeleteUserAction">
+            <result name="success">user.jsp</result>
+        </action>
+    </package>
 </struts>

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="bookstore.model.Book" table="book" schema="bookstore">
+        <id name="isbn" column="ISBN"/>
+        <property name="title" column="title"/>
+        <property name="author" column="author"/>
+        <property name="publisher" column="publisher"/>
+        <property name="publishedDate" column="published_date"/>
+        <property name="language" column="language"/>
+        <property name="classification" column="classification"/>
+        <property name="price" column="price"/>
+        <property name="inventory" column="inventory"/>
+    </class>
+</hibernate-mapping>
