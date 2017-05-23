@@ -10,18 +10,35 @@
     <constant name="struts.devMode" value="true" />
     <constant name="struts.convention.classes.reload" value="true" />
     <package name="process" extends="struts-default">
+
+
         <!-- User -->
         <action name="user" class="bookstore.action.user.ListUserAction">
-            <result name="success">user.jsp</result>
+            <result name="success">WEB-INF/admin/user.jsp</result>
         </action>
         <action name="addUser" class="bookstore.action.user.AddUserAction">
-            <result name="success">user.jsp</result>
+            <result name="success">WEB-INF/admin/user.jsp</result>
         </action>
         <action name="updateUser" class="bookstore.action.user.UpdateUserAction">
-            <result name="success">user.jsp</result>
+            <result name="success">WEB-INF/admin/user.jsp</result>
         </action>
         <action name="deleteUser" class="bookstore.action.user.DeleteUserAction">
-            <result name="success">user.jsp</result>
+            <result name="success">WEB-INF/admin/user.jsp</result>
         </action>
+
+        <action name="admin">
+            <result>/WEB-INF/admin/admin.jsp</result>
+        </action>
+
+        <action name="index">
+            <result>/WEB-INF/index.jsp</result>
+        </action>
+        <!--
+        <action name="*">
+            <result>/WEB-INF/{1}.jsp</result>
+        </action>
+        -->
+
+
     </package>
 </struts>

@@ -100,7 +100,8 @@ $(document).ready(function() {
 
     $('#info_submit').click(function () {
         var form_data = $('#user_form').serialize();
-        if (form_data.id == "") {
+        var uid = form_data.replace(/^uid=|&.*/g, "");
+        if (uid == "") {
             $.ajax({
                 url: "addUser",
                 data: form_data,

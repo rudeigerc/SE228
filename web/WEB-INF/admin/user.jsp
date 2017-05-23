@@ -66,7 +66,7 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="index.jsp"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                                <li><a href="index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                                     Home
                                 </a></li>
                                 <li role="separator" class="divider"></li>
@@ -85,7 +85,7 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li><a href="admin.jsp">
+                    <li><a href="admin">
                         <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
                         Overview
                     </a></li>
@@ -117,8 +117,7 @@
                         </thead>
                         <tbody>
                             <%
-                                for (int i = 0; i < userList.size(); i++) {
-                                    User user = userList.get(i);
+                                for (User user : userList) {
                             %>
                             <tr>
                                 <td><%=user.getUid()%></td>
