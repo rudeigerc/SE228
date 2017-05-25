@@ -61,7 +61,7 @@ $(document).ready(function() {
             url: "./select_user",
             success: function (data) {
                 if (data) {
-                    $("#username").append("<option selected='selected'></option>")
+                    $("#username").append("<option selected='selected'></option>");
                     for (var i = 0; i < data.username.length; i++) {
                         $("#username").append("<option value='" + data.username[i] + "'>" + data.username[i] + "</option>");
                     }

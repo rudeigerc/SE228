@@ -1,6 +1,4 @@
-<%@ taglib prefix="c" uri="/struts-tags" %>
 <%@ page import="java.io.PrintWriter" %>
-<%@ page import="javax.servlet.http.HttpSession" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
@@ -10,19 +8,19 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="A naive web bookstore.">
     <meta name="author" content="Yuchen Cheng">
-    <link rel="icon" href="icon/data_celtic_knot.ico">
+    <link rel="icon" href="<%=request.getContextPath()%>/icon/data_celtic_knot.ico">
 
     <title>Bookstore</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="docs/examples/jumbotron/jumbotron.css" rel="stylesheet">
-    <link href="docs/examples/carousel/carousel.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/docs/examples/jumbotron/jumbotron.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/docs/examples/carousel/carousel.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -40,75 +38,94 @@
 
 <body>
 
-
 <%
-    HttpSession _session = request.getSession(false);
-    String isLogin = (String) _session.getAttribute("isLogin");
     PrintWriter _out = response.getWriter();
-    if ("true".equals(isLogin)) {
-        String username = (String) _session.getAttribute("username");
-        _out.println("    <nav class=\"navbar navbar-inverse navbar-fixed-top\">\n" +
-                "        <div class=\"container\" id=\"container\">\n" +
-                "            <div class=\"navbar-header\">\n" +
-                "                <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n" +
-                "                    <span class=\"sr-only\">Toggle navigation</span>\n" +
-                "                    <span class=\"icon-bar\"></span>\n" +
-                "                    <span class=\"icon-bar\"></span>\n" +
-                "                    <span class=\"icon-bar\"></span>\n" +
-                "                </button>\n" +
-                "                <a class=\"navbar-brand\" href=\"#\">Bookstore</a>\n" +
-                "            </div>\n" +
-                "            <div id=\"navbar\" class=\"navbar-collapse collapse\">" +
-                "                <ul class=\"nav navbar-nav navbar-right navbar-form\">\n" +
-                "                    <li class=\"btn-group\">\n" +
-                "                        <div class=\"btn-group\">\n" +
-                "                            <button type=\"button\" class=\"btn btn-primary dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
-                username +
-                "                                <span class=\"caret\"></span>\n" +
-                "                            </button>\n" +
-                "                            <ul class=\"dropdown-menu\">\n" +
-                "                                <li><a href=\"index.jsp\"><span class=\"glyphicon glyphicon-home\"></span>\n" +
-                "                                    Home\n" +
-                "                                </a></li>\n" +
-                "                                <li role=\"separator\" class=\"divider\"></li>\n" +
-                "                                <li><a href=\"logout\"><span class=\"glyphicon glyphicon-warning-sign\"></span>\n" +
-                "                                    Log out\n" +
-                "                                </a></li>\n" +
-                "                            </ul>\n" +
-                "                        </div>\n" +
-                "                    </li>\n" +
-                "                </ul>\n" +
-                "            </div>\n" +
-                "        </nav>");
-
-    } else {
-        _out.println("    <nav class=\"navbar navbar-inverse navbar-fixed-top\">\n" +
-                "        <div class=\"container\" id=\"container\">\n" +
-                "            <div class=\"navbar-header\">\n" +
-                "                <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n" +
-                "                    <span class=\"sr-only\">Toggle navigation</span>\n" +
-                "                    <span class=\"icon-bar\"></span>\n" +
-                "                    <span class=\"icon-bar\"></span>\n" +
-                "                    <span class=\"icon-bar\"></span>\n" +
-                "                </button>\n" +
-                "                <a class=\"navbar-brand\" href=\"#\">Bookstore</a>\n" +
-                "            </div>\n" +
-                "            <div id=\"navbar\" class=\"navbar-collapse collapse\">" +
-                "                    <form class=\"navbar-form navbar-right\" id=\"login_form\" action=\"login\" method=\"post\">\n" +
-                "                        <div class=\"form-group\">\n" +
-                "                            <input type=\"text\" placeholder=\"Username\" class=\"form-control\" id=\"login_username\" name=\"login_username\">\n" +
-                "                        </div>\n" +
-                "                        <div class=\"form-group\">\n" +
-                "                            <input type=\"password\" placeholder=\"Password\" class=\"form-control\" id=\"login_password\" name=\"login_password\">\n" +
-                "                        </div>\n" +
-                "                        <input type=\"hidden\" name=\"${_csrf.parameterName}\" value=\"${_csrf.token}\"/>\n" +
-                "                        <button type=\"submit\" class=\"btn btn-success\" id=\"sign_in\" >Sign in</button>\n" +
-                "                        <button type=\"button\" class=\"btn btn-primary\" data-toggle=\"modal\" data-target=\"#signup_modal\">Sign up</button>\n" +
-                "                    </form>\n" +
-                "                </div>\n" +
-                "            </div>\n" +
-                "        </nav>");
+    if ("error".equals(request.getAttribute("login"))) {
+        _out.println("<script>alert('Invalid username or password')</script>");
     }
+    if (request.getUserPrincipal() != null) {
+        String username = request.getUserPrincipal().getName();
+
+%>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container" id="_container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Bookstore</a>
+                </div>
+                <div id="_navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home<span class="sr-only">(current)</span></a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right navbar-form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default">
+                                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                                <span class="badge">0</span>
+                            </button>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                    <%=username%>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<%=request.getContextPath()%>/index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                                        Home
+                                    </a></li>
+                                    <% if ("admin".equals(username)) { %>
+                                    <li><a href="<%=request.getContextPath()%>/admin/admin"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                                        Manage
+                                    </a></li>
+                                    <% } %>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="<%=request.getContextPath()%>/logout"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                                        Log out
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+<% } else { %>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container" id="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Bookstore</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-right" id="login_form" action="login" method="post">
+                        <div class="form-group">
+                            <input type="text" placeholder="Username" class="form-control" id="login_username" name="login_username">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" class="form-control" id="login_password" name="login_password">
+                        </div>
+                        <button type="submit" class="btn btn-success" id="sign_in" >Sign in</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signup_modal">Sign up</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+<%
+        }
 %>
 
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -120,7 +137,7 @@
         </ol>
         <div class="carousel-inner" role="listbox">
             <div class="item active">
-                <img class="first-slide" src="image/slide_bg1.png" alt="First slide">
+                <img class="first-slide" src="<%=request.getContextPath()%>/image/slide_bg1.png" alt="First slide">
                 <div class="container">
                     <div class="carousel-caption">
                         <h1>Welcome to the bookstore!</h1>
@@ -130,14 +147,14 @@
                 </div>
             </div>
             <div class="item">
-                <img class="second-slide" src="image/slide_bg2.jpg" alt="Second slide">
+                <img class="second-slide" src="<%=request.getContextPath()%>/image/slide_bg2.jpg" alt="Second slide">
                 <div class="container">
                     <div class="carousel-caption">
                     </div>
                 </div>
             </div>
             <div class="item">
-                <img class="third-slide" src="image/slide_bg3.jpg" alt="Third slide">
+                <img class="third-slide" src="<%=request.getContextPath()%>/image/slide_bg3.jpg" alt="Third slide">
                 <div class="container">
                     <div class="carousel-caption">
                     </div>
@@ -232,6 +249,9 @@
                                 <input type="email" class="form-control" id="email" name="email" data-error="The E-mail address is invalid." required>
                                 <span id="email_help" class="help-block with-errors">We promise not to share your email with anyone.</span>
                             </div>
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" id="role" name="role" required>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal" id="info_cancel">Cancel</button>
@@ -250,14 +270,29 @@
 </body>
 
 
-
+<script>
+    $(document).ready(function() {
+        $('#info_submit').click(function () {
+            var form_data = $('#user_form').serialize();
+            $.ajax({
+                url: "addUser",
+                data: form_data,
+                type: "post",
+                success: function (data) {
+                    $('#signup_modal').modal('hide');
+                    location.reload();
+                }
+            })
+        });
+    });
+</script>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script>window.jQuery || document.write('<script src="docs/assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="js/bootstrap.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="<%=request.getContextPath()%>/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
 
 </html>

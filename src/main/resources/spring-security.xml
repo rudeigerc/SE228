@@ -10,16 +10,14 @@
     <http auto-config="true">
         <access-denied-handler error-page="/index"/>
         <intercept-url pattern="/index" access="permitAll" />
-        <intercept-url pattern="/admin*" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/book*" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/user*" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/order*" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+
 
         <form-login
                 login-page="/index"
                 login-processing-url="/login"
-                default-target-url="/admin"
-                authentication-failure-url="/login?error"
+                default-target-url="/index"
+                authentication-failure-url="/index?login=error"
                 username-parameter="login_username"
                 password-parameter="login_password" />
         <logout logout-url="/logout"
@@ -31,15 +29,9 @@
 
     <authentication-manager>
         <authentication-provider>
-            <!--
-            <user-service>
-                <user name="admin" password="admin" authorities="ROLE_ADMIN" />
-                <user name="guest" password="guest" authorities="ROLE_USER" />
-            </user-service>
-            -->
             <jdbc-user-service data-source-ref="dataSource"
                                users-by-username-query="select username, password, 1 from user where username = ?"
-                               authorities-by-username-query="select username, 'ROLE_ADMIN' from user where username = ?" />
+                               authorities-by-username-query="select username, role from user where username = ?" />
         </authentication-provider>
     </authentication-manager>
 

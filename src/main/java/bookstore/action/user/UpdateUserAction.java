@@ -15,6 +15,7 @@ public class UpdateUserAction extends BaseAction {
     private String password;
     private String phone;
     private String email;
+    private String role;
 
     private AppService appService;
 
@@ -58,6 +59,14 @@ public class UpdateUserAction extends BaseAction {
         this.email = email;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public void setAppService(AppService appService) {
         this.appService = appService;
     }
@@ -69,6 +78,7 @@ public class UpdateUserAction extends BaseAction {
         user.setPassword(password);
         user.setPhone(phone);
         user.setEmail(email);
+        user.setRole(role);
         appService.updateUser(user);
         return SUCCESS;
     }

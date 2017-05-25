@@ -13,13 +13,15 @@ public class User {
     private String password;
     private String phone;
     private String email;
+    private String role;
 
     public User() { }
-    public User(String username, String password, String phone, String email) {
+    public User(String username, String password, String phone, String email, String role) {
         this.username = username;
         this.password = password;
         this.phone = phone;
         this.email = email;
+        this.role = role;
     }
 
     @Id
@@ -72,6 +74,16 @@ public class User {
         this.email = email;
     }
 
+    @Basic
+    @Column(name = "role")
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,6 +96,7 @@ public class User {
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (role != null ? !role.equals(that.role) : that.role != null) return false;
 
         return true;
     }
@@ -95,6 +108,7 @@ public class User {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 }

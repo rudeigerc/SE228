@@ -59,10 +59,9 @@
             <tx:method name="*" />
         </tx:attributes>
     </tx:advice>
-    <!--
+
     <aop:config>
         <aop:pointcut id="beanPointcut" expression="bean(appService)" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="beanPointcut" />
     </aop:config>
-    -->
 </beans>

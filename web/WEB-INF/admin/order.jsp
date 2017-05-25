@@ -7,18 +7,18 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="Yuchen Cheng">
-    <link rel="icon" href="icon/data_celtic_knot.ico">
+    <link rel="icon" href="<%=request.getContextPath()%>/icon/data_celtic_knot.ico">
 
     <title>Bookstore Database - Order</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="docs/examples/dashboard/dashboard.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/docs/examples/dashboard/dashboard.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -29,7 +29,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jq-2.2.4/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.css"/>
 
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jq-2.2.4/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>
-    <script type="text/javascript" src="js/order.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/js/order.js"></script>
 
 
 </head>
@@ -58,11 +58,11 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                                <li><a href="<%=request.getContextPath()%>/index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                                     Home
                                 </a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="logout"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                                <li><a href="<%=request.getContextPath()%>/logout"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
                                     Log out
                                 </a></li>
                             </ul>
@@ -155,8 +155,8 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script>window.jQuery || document.write('<script src="docs/assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="js/bootstrap.min.js"></script>
+<script>window.jQuery || document.write('<script src="<%=request.getContextPath()%>/docs/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="<%=request.getContextPath()%>/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
 

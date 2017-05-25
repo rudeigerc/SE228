@@ -14,6 +14,7 @@ public class AddUserAction extends BaseAction {
     private String password;
     private String phone;
     private String email;
+    private String role;
 
     private AppService appService;
 
@@ -49,13 +50,22 @@ public class AddUserAction extends BaseAction {
         this.email = email;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        if ("".equals(role)) role = "ROLE_USER";
+        this.role = role;
+    }
+
     public void setAppService(AppService appService) {
         this.appService = appService;
     }
 
     @Override
     public String execute() throws Exception {
-        User user = new User(username, password, phone, email);
+        User user = new User(username, password, phone, email, role);
         appService.addUser(user);
         return SUCCESS;
     }

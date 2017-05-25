@@ -5,7 +5,8 @@ $(document).ready(function() {
             { "data": "username" },
             { "data": "password" },
             { "data": "phone" },
-            { "data": "email" }
+            { "data": "email" },
+            { "data": "role"}
         ],
         "order": [[0, 'asc']],
         "dom": '<"toolbar">frtip'
@@ -25,6 +26,7 @@ $(document).ready(function() {
         $('#password').val("");
         $('#phone').val("");
         $('#email').val("");
+        $('#role').val("");
         $('#uid').removeAttr("readonly");
         $('#username').removeAttr("readonly");
     }
@@ -73,6 +75,7 @@ $(document).ready(function() {
         $("#password").val(row.password);
         $("#phone").val(row.phone);
         $("#email").val(row.email);
+        $("#role").val(row.role);
         $('#uid').attr("readonly","readonly");
         $('#username').attr("readonly","readonly");
 
