@@ -4,10 +4,11 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="bookstore.model.Order" table="order" schema="bookstore">
-        <id name="orderId" column="order_ID"/>
+    <class name="bookstore.model.Order" table="`order`" schema="bookstore">
+        <id name="orderId" column="order_id"/>
         <property name="username" column="username"/>
         <property name="time" column="time"/>
         <property name="total" column="total"/>
+        <property name="status" column="status"/>
     </class>
 </hibernate-mapping>

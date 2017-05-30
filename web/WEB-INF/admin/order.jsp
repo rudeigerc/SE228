@@ -1,3 +1,5 @@
+<%@ page import="bookstore.model.Order" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,28 +15,27 @@
 
     <!-- Bootstrap core CSS -->
     <link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/dashboard.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/datatables.min.css" rel="stylesheet">
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="<%=request.getContextPath()%>/docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="<%=request.getContextPath()%>/docs/examples/dashboard/dashboard.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jq-2.2.4/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.css"/>
-
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jq-2.2.4/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/js/datatables.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/js/decimal.min.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/order.js"></script>
-
 
 </head>
 
 <body>
+<%
+    ArrayList<Order> orderList = new ArrayList<>();
+    ArrayList<String> usernameList = new ArrayList<>();
+    if (request.getAttribute("orders") != null) {
+        orderList = (ArrayList<Order>) request.getAttribute("orders");
+    }
+    if (request.getAttribute("usernames") != null) {
+        usernameList = (ArrayList<String>) request.getAttribute("usernames");
+    }
+
+%>
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -94,6 +95,10 @@
                         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                         Order<span class="sr-only">(current)</span>
                     </a></li>
+                    <li><a href="orderItem">
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                        Order Item
+                    </a></li>
                 </ul>
 
             </div>
@@ -106,52 +111,107 @@
                         <th>Username</th>
                         <th>Time</th>
                         <th>Total</th>
+                        <th>Status</th>
                     </tr>
                     </thead>
                     <tbody>
+                    <%
+                        for (Order order : orderList) {
+                    %>
+                    <tr>
+                        <td><%=order.getOrderId()%></td>
+                        <td><%=order.getUsername()%></td>
+                        <td><%=order.getTime()%></td>
+                        <td><%=order.getTotal()%></td>
+                        <td><%=order.getStatus()%></td>
+                    </tr>
+                    <%
+                        }
+                    %>
                     </tbody>
                 </table>
             </div>
-
         </div>
+    </div>
 
-        <div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="info_title" aria-hidden="true">
-            <div class="modal-dialog" style="width:400px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="info_cross">&times;</button>
-                        <h4 class="modal-title" id="info_title">Order Information</h4>
+    <div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="info_title" aria-hidden="true">
+        <div class="modal-dialog" style="width:400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="info_cross">&times;</button>
+                    <h4 class="modal-title" id="info_title">Order Information</h4>
+                </div>
+                <form id="order_form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="orderId" name="orderId">
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <select class="form-control" id="username" name="username">
+                                <option selected="selected"></option>
+                                <%
+                                    for (String username : usernameList) {
+                                %>
+                                <option value="<%=username%>"><%=username%></option>
+                                <%
+                                    }
+                                %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Time</label>
+                            <input type="datetime" class="form-control" id="time" name="time" readonly="readonly">
+                        </div>
+                        <div class="form-group">
+                            <label for="total">Total</label>
+                            <input type="text" class="form-control" id="total" name="total" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="status" name="status" required>
+                        </div>
                     </div>
-                    <form id="order_form">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <input type="hidden" class="form-control" id="order_ID" name="order_ID">
-                            </div>
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <select class="form-control" id="username" name="username"></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="time">Time</label>
-                                <input type="datetime" class="form-control" id="time" name="time" readonly="readonly">
-                            </div>
-                            <div class="form-group">
-                                <label for="total">Total</label>
-                                <input type="text" class="form-control" id="total" name="total" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" id="info_cancel">Cancel</button>
-                            <button type="button" class="btn btn-primary" id="info_submit">Submit</button>
-                        </div>
-                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="info_cancel">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="info_submit">Submit</button>
+                    </div>
+                </form>
 
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="orderItem_modal" tabindex="-1" role="dialog" aria-labelledby="order_header" aria-hidden="true">
+        <div class="modal-dialog" style="width:400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="order_header"></h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-hover" id="orderDetail" width="100%">
+                        <thead>
+                            <tr>
+                                <th>ISBN</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2" style="text-align:right">Total:</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>
-
     </div>
 </body>
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

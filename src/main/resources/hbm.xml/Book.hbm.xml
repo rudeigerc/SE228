@@ -10,8 +10,7 @@
         <property name="author" column="author"/>
         <property name="publisher" column="publisher"/>
         <property name="publishedDate" column="published_date"/>
-        <property name="language" column="language"/>
-        <property name="classification" column="classification"/>
+        <property name="category" column="category"/>
         <property name="price" column="price"/>
         <property name="inventory" column="inventory"/>
     </class>

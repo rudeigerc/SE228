@@ -3,18 +3,27 @@ package bookstore.model;
 import javax.persistence.*;
 
 /**
- * Created by rudeigerc on 2017/5/21.
+ * Created by rudeigerc on 2017/5/26.
  */
 @Entity
 @Table(name = "orderItem", schema = "bookstore")
 public class OrderItem {
     private int id;
-    private String orderId;
+    private int orderId;
     private String isbn;
     private int quantity;
+    private String price;
+
+    public OrderItem() { }
+    public OrderItem(int orderId, String isbn, int quantity, String price) {
+        this.orderId = orderId;
+        this.isbn = isbn;
+        this.quantity = quantity;
+        this.price = price;
+    }
 
     @Id
-    @Column(name = "id")
+    @Column(name="id")
     public int getId() {
         return id;
     }
@@ -24,12 +33,12 @@ public class OrderItem {
     }
 
     @Basic
-    @Column(name = "order_ID")
-    public String getOrderId() {
+    @Column(name = "order_id")
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
@@ -53,27 +62,37 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
+    @Basic
+    @Column(name = "price")
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OrderItem that = (OrderItem) o;
+        OrderItem orderItem = (OrderItem) o;
 
-        if (id != that.id) return false;
-        if (quantity != that.quantity) return false;
-        if (orderId != null ? !orderId.equals(that.orderId) : that.orderId != null) return false;
-        if (isbn != null ? !isbn.equals(that.isbn) : that.isbn != null) return false;
+        if (orderId != orderItem.orderId) return false;
+        if (quantity != orderItem.quantity) return false;
+        if (isbn != null ? !isbn.equals(orderItem.isbn) : orderItem.isbn != null) return false;
+        if (price != null ? !price.equals(orderItem.price) : orderItem.price != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (orderId != null ? orderId.hashCode() : 0);
+        int result = orderId;
         result = 31 * result + (isbn != null ? isbn.hashCode() : 0);
         result = 31 * result + quantity;
+        result = 31 * result + (price != null ? price.hashCode() : 0);
         return result;
     }
 }

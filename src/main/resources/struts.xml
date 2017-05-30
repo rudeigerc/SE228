@@ -11,12 +11,17 @@
     <constant name="struts.convention.classes.reload" value="true" />
 
     <package name="index" extends="struts-default">
-        <action name="index">
+        <action name="index" class="bookstore.action.showBookAtIndex">
             <result>/WEB-INF/index.jsp</result>
+        </action>
+        <action name="signUp" class="bookstore.action.auth.SignUpAction">
+            <result name="error">/WEB-INF/index.jsp?signup=error</result>
+            <result name="success">/WEB-INF/index.jsp</result>
+            <exception-mapping exception="org.springframework.dao.DataIntegrityViolationException" result="error"/>
         </action>
     </package>
 
-    <package name="admin" namespace="/admin" extends="struts-default">
+    <package name="admin" namespace="/admin" extends="json-default">
         <action name="admin">
             <result>/WEB-INF/admin/admin.jsp</result>
         </action>
@@ -32,6 +37,54 @@
         </action>
         <action name="deleteUser" class="bookstore.action.user.DeleteUserAction">
             <result name="success">/WEB-INF/admin/user.jsp</result>
+        </action>
+
+        <!-- Book -->
+        <action name="book" class="bookstore.action.book.ListBookAction">
+            <result name="success">/WEB-INF/admin/book.jsp</result>
+        </action>
+        <action name="addBook" class="bookstore.action.book.AddBookAction">
+            <result name="success">/WEB-INF/admin/book.jsp</result>
+        </action>
+        <action name="updateBook" class="bookstore.action.book.UpdateBookAction">
+            <result name="success">/WEB-INF/admin/book.jsp</result>
+        </action>
+        <action name="deleteBook" class="bookstore.action.book.DeleteBookAction">
+            <result name="success">/WEB-INF/admin/book.jsp</result>
+        </action>
+
+        <!-- Order -->
+        <action name="order" class="bookstore.action.order.ListOrderAction">
+            <result name="success">/WEB-INF/admin/order.jsp</result>
+        </action>
+        <action name="addOrder" class="bookstore.action.order.AddOrderAction">
+            <result name="success">/WEB-INF/admin/order.jsp</result>
+        </action>
+        <action name="updateOrder" class="bookstore.action.order.UpdateOrderAction">
+            <result name="success">/WEB-INF/admin/order.jsp</result>
+        </action>
+        <action name="deleteOrder" class="bookstore.action.order.DeleteOrderAction">
+            <result name="success">/WEB-INF/admin/order.jsp</result>
+        </action>
+        <action name="orderDetail" class="bookstore.action.order.ListOrderDetailAction">
+            <result name="success" type="json">
+                <param name="root">json</param>
+                <param name="includeProperties">isbn, quantity, price</param>
+            </result>
+        </action>
+
+        <!-- Order Item -->
+        <action name="orderItem" class="bookstore.action.orderItem.ListOrderItemAction">
+            <result name="success">/WEB-INF/admin/orderItem.jsp</result>
+        </action>
+        <action name="addOrderItem" class="bookstore.action.orderItem.AddOrderItemAction">
+            <result name="success">/WEB-INF/admin/orderItem.jsp</result>
+        </action>
+        <action name="updateOrderItem" class="bookstore.action.orderItem.UpdateOrderItemAction">
+            <result name="success">/WEB-INF/admin/orderItem.jsp</result>
+        </action>
+        <action name="deleteOrderItem" class="bookstore.action.orderItem.DeleteOrderItemAction">
+            <result name="success">/WEB-INF/admin/orderItem.jsp</result>
         </action>
 
         <!--

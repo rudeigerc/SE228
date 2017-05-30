@@ -11,15 +11,16 @@
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"
-          p:driverClass="com.mysql.cj.jdbc.Driver"
-          p:jdbcUrl="jdbc:mysql://localhost:3306/bookstore?useSSL=false"
-          p:user="root"
-          p:password=""
-          p:maxPoolSize="40"
-          p:minPoolSize="1"
-          p:initialPoolSize="1"
-          p:maxIdleTime="20"/>
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.cj.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/bookstore?useSSL=false" />
+        <property name="user" value="root" />
+        <property name="password" value="" />
+        <property name="maxPoolSize" value="40" />
+        <property name="minPoolSize" value="1" />
+        <property name="initialPoolSize" value="1" />
+        <property name="maxIdleTime" value="20" />
+    </bean>
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
           p:dataSource-ref="dataSource">
@@ -36,18 +37,31 @@
             <value>
                 hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
                 hibernate.hbm2ddl.auto=update
-                hibernate.show_sql=true
+                hibernate.show_sql=false
                 hibernate.format_sql=true
             </value>
         </property>
     </bean>
 
+    <bean id="bookDao" class="bookstore.dao.impl.BookDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
     <bean id="userDao" class="bookstore.dao.impl.UserDaoImpl">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
+    <bean id="orderDao" class="bookstore.dao.impl.OrderDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <bean id="orderItemDao" class="bookstore.dao.impl.OrderItemDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
 
     <bean id="appService" class="bookstore.service.impl.AppServiceImpl">
+        <property name="bookDao" ref="bookDao" />
         <property name="userDao" ref="userDao" />
+        <property name="orderDao" ref="orderDao" />
+        <property name="orderItemDao" ref="orderItemDao" />
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager"

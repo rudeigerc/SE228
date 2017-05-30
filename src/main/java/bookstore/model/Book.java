@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 /**
- * Created by rudeigerc on 2017/5/21.
+ * Created by rudeigerc on 2017/5/26.
  */
 @Entity
 @Table(name = "book", schema = "bookstore")
@@ -13,11 +13,23 @@ public class Book {
     private String author;
     private String isbn;
     private String publisher;
-    private Date publishedDate;
-    private String language;
-    private String classification;
+    private String publishedDate;
+    private String category;
     private String price;
     private int inventory;
+
+    public Book() {}
+
+    public Book(String title, String author, String isbn, String publisher, String publishedDate, String category, String price, int inventory) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.publisher = publisher;
+        this.publishedDate = publishedDate;
+        this.category = category;
+        this.price = price;
+        this.inventory = inventory;
+    }
 
     @Basic
     @Column(name = "title")
@@ -61,32 +73,22 @@ public class Book {
 
     @Basic
     @Column(name = "published_date")
-    public Date getPublishedDate() {
+    public String getPublishedDate() {
         return publishedDate;
     }
 
-    public void setPublishedDate(Date publishedDate) {
+    public void setPublishedDate(String publishedDate) {
         this.publishedDate = publishedDate;
     }
 
     @Basic
-    @Column(name = "language")
-    public String getLanguage() {
-        return language;
+    @Column(name = "category")
+    public String getCategory() {
+        return category;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    @Basic
-    @Column(name = "classification")
-    public String getClassification() {
-        return classification;
-    }
-
-    public void setClassification(String classification) {
-        this.classification = classification;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     @Basic
@@ -114,19 +116,17 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Book that = (Book) o;
+        Book book = (Book) o;
 
-        if (inventory != that.inventory) return false;
-        if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (author != null ? !author.equals(that.author) : that.author != null) return false;
-        if (isbn != null ? !isbn.equals(that.isbn) : that.isbn != null) return false;
-        if (publisher != null ? !publisher.equals(that.publisher) : that.publisher != null) return false;
-        if (publishedDate != null ? !publishedDate.equals(that.publishedDate) : that.publishedDate != null)
+        if (inventory != book.inventory) return false;
+        if (title != null ? !title.equals(book.title) : book.title != null) return false;
+        if (author != null ? !author.equals(book.author) : book.author != null) return false;
+        if (isbn != null ? !isbn.equals(book.isbn) : book.isbn != null) return false;
+        if (publisher != null ? !publisher.equals(book.publisher) : book.publisher != null) return false;
+        if (publishedDate != null ? !publishedDate.equals(book.publishedDate) : book.publishedDate != null)
             return false;
-        if (language != null ? !language.equals(that.language) : that.language != null) return false;
-        if (classification != null ? !classification.equals(that.classification) : that.classification != null)
-            return false;
-        if (price != null ? !price.equals(that.price) : that.price != null) return false;
+        if (category != null ? !category.equals(book.category) : book.category != null) return false;
+        if (price != null ? !price.equals(book.price) : book.price != null) return false;
 
         return true;
     }
@@ -138,8 +138,7 @@ public class Book {
         result = 31 * result + (isbn != null ? isbn.hashCode() : 0);
         result = 31 * result + (publisher != null ? publisher.hashCode() : 0);
         result = 31 * result + (publishedDate != null ? publishedDate.hashCode() : 0);
-        result = 31 * result + (language != null ? language.hashCode() : 0);
-        result = 31 * result + (classification != null ? classification.hashCode() : 0);
+        result = 31 * result + (category != null ? category.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + inventory;
         return result;

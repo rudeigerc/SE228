@@ -55,7 +55,6 @@ public class AddUserAction extends BaseAction {
     }
 
     public void setRole(String role) {
-        if ("".equals(role)) role = "ROLE_USER";
         this.role = role;
     }
 

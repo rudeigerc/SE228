@@ -1,29 +1,30 @@
 $(document).ready(function() {
     var table = $('#order').DataTable( {
-        "processing": true,
-        "serverSide": true,
-        "ajax": "./order",
         "columns": [
-            { "data": "order_ID" },
+            { "data": "orderId" },
             { "data": "username" },
             { "data": "time" },
-            { "data": "total" }
+            { "data": "total" },
+            { "data": "status" }
         ],
         "order": [[0, 'asc']],
         "dom": '<"toolbar">frtip'
     } );
 
+
     $("div.toolbar").html(
         '<button type="button" class="btn btn-success" id="add" data-toggle="modal" name="add">Add</button> ' +
         '<button type="button" class="btn btn-warning" id="edit" data-toggle="modal" disabled="disabled" name="edit">Edit</button> ' +
-        '<button type="button" class="btn btn-danger" id="delete" disabled="disabled" name="delete">Delete</button>'
+        '<button type="button" class="btn btn-danger" id="delete" disabled="disabled" name="delete">Delete</button> ' +
+        '<button type="button" class="btn btn-info" id="detail" disabled="disabled" name="detail" data-toggle="modal" data-target="#orderItem_modal">Detail</button>'
     );
 
     function reset_all() {
-        $("#order_ID").val("");
+        $("#orderId").val("");
         $("#username").val("");
         $("#time").val("");
         $("#total").val("");
+        $("#status").val("");
         $('#time').removeAttr("readonly");
         $('#username').removeAttr("disabled");
     }
@@ -42,43 +43,31 @@ $(document).ready(function() {
         if ( $(this).hasClass('selected') ) {
             $('#edit').attr("disabled", "disabled");
             $('#delete').attr("disabled", "disabled");
+            $('#detail').attr("disabled", "disabled");
             $(this).removeClass('selected');
         }
         else {
             $('#edit').attr("disabled", false);
             $('#delete').attr("disabled", false);
+            $('#detail').attr("disabled", false);
             table.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
         }
     } );
 
-
     $('#add').click( function () {
         reset_all();
-        $("#username option").remove();
         $("#add").attr("data-target", "#info_modal");
-        $.ajax({
-            url: "./select_user",
-            success: function (data) {
-                if (data) {
-                    $("#username").append("<option selected='selected'></option>");
-                    for (var i = 0; i < data.username.length; i++) {
-                        $("#username").append("<option value='" + data.username[i] + "'>" + data.username[i] + "</option>");
-                    }
-                }
-            }
-        });
     });
 
     $('#edit').click( function () {
         var row = get_selected_row();
         $("#edit").attr("data-target", "#info_modal");
-        $("#order_ID").val(row.order_ID);
-        $("#username").append("<option value='" + row.username + "' selected='selected'>" + row.username + "</option>");
+        $("#orderId").val(row.orderId);
+        $("#username").val(row.username);
         $("#time").val(row.time);
         $("#total").val(row.total);
         $("#time").attr("readonly", "readonly");
-        $("#username").attr("disabled", "disabled");
 
     });
 
@@ -87,8 +76,8 @@ $(document).ready(function() {
         var confirm = window.confirm("WARNING: Irrevocable operation.");
         if (!confirm) return;
         $.ajax({
-            url: "./delete_order",
-            data: {"order_ID": row.order_ID},
+            url: "deleteOrder",
+            data: {"orderId": row.orderId},
             type: "post",
             success: function (data) {
                 location.reload();
@@ -99,16 +88,31 @@ $(document).ready(function() {
 
     $('#info_submit').click(function () {
         var form_data = $('#order_form').serialize();
-        $.ajax({
-            url: "./add_order",
-            data: form_data,
-            type: "post",
-            success: function (data) {
-                reset_all();
-                $('#info_modal').modal('hide');
-                location.reload();
-            }
-        })
+        var orderId = form_data.replace(/^orderId=|&.*/g, "");
+        if (orderId == "") {
+            $.ajax({
+                url: "addOrder",
+                data: form_data,
+                type: "post",
+                success: function (data) {
+                    reset_all();
+                    $('#info_modal').modal('hide');
+                    location.reload();
+                }
+            })
+        }
+        else {
+            $.ajax({
+                url: "updateOrder",
+                data: form_data,
+                type: "post",
+                success: function (data) {
+                    reset_all();
+                    $('#info_modal').modal('hide');
+                    location.reload();
+                }
+            })
+        }
 
     });
 
@@ -116,27 +120,41 @@ $(document).ready(function() {
 
     $('#info_cross').click(reset_all());
 
-
-    function getNowFormatDate() {
-        var date = new Date();
-        var seperator1 = "-";
-        var seperator2 = ":";
-        var month = date.getMonth() + 1;
-        var strDate = date.getDate();
-        var hour = date.getHours();
-        var minute = date.getMinutes();
-        var second = date.getSeconds();
-
-        if (month >= 1 && month <= 9) month = "0" + month;
-        if (strDate >= 0 && strDate <= 9) strDate = "0" + strDate;
-        if (hour >= 0 && hour <= 9) hour = "0" + hour;
-        if (minute >= 0 && minute <= 9) minute = "0" + minute;
-        if (second >= 0 && second <= 9) second = "0" + second;
-
-        var currentDate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + hour + seperator2 + minute + seperator2 + second;
-        return currentDate;
-    }
-
-    $('#time').val(getNowFormatDate());
+    $('#detail').click( function () {
+        var row = get_selected_row();
+        document.getElementById('order_header').innerHTML= "Order #" + row.orderId + " User: " + row.username;
+        var detail_table = $('#orderDetail').DataTable( {
+            "destroy": true,
+            "ajax": {
+                "url": "orderDetail",
+                "type": "POST",
+                "data": function ( d ) {
+                    return $.extend( {}, d, {
+                        "orderId": row.orderId
+                    } );
+                },
+                "dataSrc": function ( json ) {
+                    json = eval("("+json+")");
+                    return json.data;
+                }
+            },
+            "columns": [
+                { "data": "isbn" },
+                { "data": "quantity" },
+                { "data": "price" }
+            ],
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "searching": false,
+            "footerCallback": function () {
+                var api = this.api();
+                var total = api.column(2).data().reduce( function (a, b) {
+                        var value = new Decimal(a).plus(new Decimal(b));
+                        return value.toString();
+                    }, 0 );
+                $( api.column(2).footer() ).html("$" + total);
+            }
+        } );
+    });
 } );

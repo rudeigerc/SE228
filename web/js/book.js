@@ -1,31 +1,16 @@
-function format ( book ) {
-    return '<blockquote><small>' +
-        '<B>Title:</B> ' + book.title + '<br>' +
-        '<B>Author:</B> ' + book.author + '<br>' +
-        '<B>ISBN-13:</B> ' + book.ISBN + '<br>' +
-        '<B>Publisher:</B> ' + book.publisher + '<br>' +
-        '<B>Published Date:</B> ' + book.published_date + '<br>' +
-        '<B>Language:</B> ' + book.language + '<br>' +
-        '<B>Classification:</B> ' + book.classification + '<br>' +
-        '<B>Price:</B> $' + book.price + '<br>' +
-        '<B>Inventory:</B> ' + book.inventory + '</small></blockquote>'
-}
-
 $(document).ready(function() {
     var table = $('#book').DataTable( {
-        "processing": true,
-        "serverSide": true,
-        "ajax": "./book",
         "columns": [
-
             { "data": "title" },
             { "data": "author" },
-            { "data": "ISBN" },
+            { "data": "isbn" },
             { "data": "publisher" },
+            { "data": "publishedDate" },
+            { "data": "category" },
             { "data": "price" },
             { "data": "inventory" }
         ],
-        "order": [[1, 'asc']],
+        "order": [[0, 'asc']],
         "dom": '<"toolbar">frtip'
 
     } );
@@ -41,26 +26,6 @@ $(document).ready(function() {
     var detailRows = [];
 
     $('#book tbody').on( 'click', 'tr', function () {
-        var tr = $(this).closest('tr');
-        var row = table.row( tr );
-        var idx = $.inArray( tr.attr('id'), detailRows );
-
-        if ( row.child.isShown() ) {
-            tr.removeClass( 'details' );
-            row.child.hide();
-
-            // Remove from the 'open' array
-            detailRows.splice( idx, 1 );
-        }
-        else {
-            tr.addClass( 'details' );
-            row.child( format( row.data() ) ).show();
-
-            // Add to the 'open' array
-            if ( idx === -1 ) {
-                detailRows.push(tr.attr('id'));
-            }
-        }
 
         if ( $(this).hasClass('selected') ) {
             $('#edit').attr("disabled", "disabled");
@@ -80,14 +45,13 @@ $(document).ready(function() {
 
         $("#title").val("");
         $("#author").val("");
-        $("#ISBN").val("");
+        $("#isbn").val("");
         $("#publisher").val("");
-        $("#published_date").val("");
-        $("#language").val("");
-        $("#classification").val("");
+        $("#publishedDate").val("");
+        $("#category").val("");
         $("#price").val("");
         $("#inventory").val("");
-        $('#ISBN').removeAttr("readonly");
+        $('#isbn').removeAttr("readonly");
     }
 
     function get_selected_row() {
@@ -102,6 +66,7 @@ $(document).ready(function() {
 
     $('#add').click( function () {
         reset_all();
+        $('#isAdd').attr("value", "true");
         $("#add").attr("data-target", "#info_modal");
     });
 
@@ -110,14 +75,14 @@ $(document).ready(function() {
         $("#edit").attr("data-target", "#info_modal");
         $("#title").val(row.title);
         $("#author").val(row.author);
-        $("#ISBN").val(row.ISBN);
+        $("#isbn").val(row.isbn);
         $("#publisher").val(row.publisher);
-        $("#published_date").val(row.published_date);
-        $("#language").val(row.language);
-        $("#classification").val(row.classification);
+        $("#publishedDate").val(row.publishedDate);
+        $("#category").val(row.category);
         $("#price").val(row.price);
         $("#inventory").val(row.inventory);
-        $('#ISBN').attr("readonly","readonly")
+        $('#isbn').attr("readonly","readonly")
+        $('#isAdd').attr("value", "false")
 
     });
 
@@ -126,8 +91,9 @@ $(document).ready(function() {
         var confirm = window.confirm("WARNING: Irrevocable operation.");
         if (!confirm) return;
         $.ajax({
-            url: "./delete_book",
-            data: {"ISBN": row.ISBN},
+            url: "deleteBook",
+            data: {"isbn": row.isbn},
+            dataType : "text",
             type: "post",
             success: function (data) {
                 location.reload();
@@ -138,16 +104,32 @@ $(document).ready(function() {
 
     $('#info_submit').click(function () {
         var form_data = $('#book_form').serialize();
-        $.ajax({
-            url: "./add_book",
-            data: form_data,
-            type: "post",
-            success: function (data) {
-                reset_all();
-                $('#info_modal').modal('hide');
-                location.reload();
-            }
-        })
+        var isAdd = form_data.replace(/^.*isAdd=/g, "");
+        form_data = form_data.replace(/isAdd=.*$/g, "");
+        if (isAdd == "true") {
+            $.ajax({
+                url: "addBook",
+                data: form_data,
+                type: "post",
+                success: function (data) {
+                    reset_all();
+                    $('#info_modal').modal('hide');
+                    location.reload();
+                }
+            })
+        }
+        else {
+            $.ajax({
+                url: "updateBook",
+                data: form_data,
+                type: "post",
+                success: function (data) {
+                    reset_all();
+                    $('#info_modal').modal('hide');
+                    location.reload();
+                }
+            })
+        }
 
     });
 

@@ -6,8 +6,9 @@
 
     <class name="bookstore.model.OrderItem" table="orderItem" schema="bookstore">
         <id name="id" column="id"/>
-        <property name="orderId" column="order_ID"/>
+        <property name="orderId" column="order_id"/>
         <property name="isbn" column="ISBN"/>
         <property name="quantity" column="quantity"/>
+        <property name="price" column="price"/>
     </class>
 </hibernate-mapping>

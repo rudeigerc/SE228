@@ -1,26 +1,35 @@
 package bookstore.model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 /**
- * Created by rudeigerc on 2017/5/21.
+ * Created by rudeigerc on 2017/5/26.
  */
 @Entity
 @Table(name = "order", schema = "bookstore")
 public class Order {
-    private String orderId;
+    private int orderId;
     private String username;
-    private Timestamp time;
+    private String time;
     private String total;
+    private int status;
+
+    public Order() { }
+
+    public Order(String username, String time, String total, int status) {
+        this.username = username;
+        this.time = time;
+        this.total = total;
+        this.status = status;
+    }
 
     @Id
-    @Column(name = "order_ID")
-    public String getOrderId() {
+    @Column(name = "order_id")
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
@@ -36,11 +45,11 @@ public class Order {
 
     @Basic
     @Column(name = "time")
-    public Timestamp getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -54,27 +63,39 @@ public class Order {
         this.total = total;
     }
 
+    @Basic
+    @Column(name = "status")
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Order that = (Order) o;
+        Order order = (Order) o;
 
-        if (orderId != null ? !orderId.equals(that.orderId) : that.orderId != null) return false;
-        if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        if (time != null ? !time.equals(that.time) : that.time != null) return false;
-        if (total != null ? !total.equals(that.total) : that.total != null) return false;
+        if (orderId != order.orderId) return false;
+        if (status != order.status) return false;
+        if (username != null ? !username.equals(order.username) : order.username != null) return false;
+        if (time != null ? !time.equals(order.time) : order.time != null) return false;
+        if (total != null ? !total.equals(order.total) : order.total != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = orderId != null ? orderId.hashCode() : 0;
+        int result = orderId;
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (time != null ? time.hashCode() : 0);
         result = 31 * result + (total != null ? total.hashCode() : 0);
+        result = 31 * result + status;
         return result;
     }
 }

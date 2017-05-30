@@ -15,22 +15,10 @@
 
     <!-- Bootstrap core CSS -->
     <link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/dashboard.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/datatables.min.css" rel="stylesheet">
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="<%=request.getContextPath()%>/docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="<%=request.getContextPath()%>/docs/examples/dashboard/dashboard.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jq-2.2.4/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.css"/>
-
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jq-2.2.4/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/js/user.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/js/datatables.min.js"></script><script type="text/javascript" src="<%=request.getContextPath()%>/js/user.js"></script>
 
 </head>
 
@@ -101,6 +89,10 @@
                         <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                         Order
                     </a></li>
+                    <li><a href="orderItem">
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                        Order Item
+                    </a></li>
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -168,7 +160,7 @@
                             <div class="form-group">
                                 <label for="role">Role</label>
                                 <select class="form-control" id="role" name="role">
-                                    <option selected='selected'></option>
+                                    <option selected="selected"></option>
                                     <option>ROLE_ADMIN</option>
                                     <option>ROLE_GUEST</option>
                                     <option>ROLE_USER</option>
