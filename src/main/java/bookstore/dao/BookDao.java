@@ -1,5 +1,7 @@
 package bookstore.dao;
 import java.util.List;
+import java.util.Set;
+
 import bookstore.model.Book;
 
 /**
@@ -10,6 +12,8 @@ public interface BookDao {
     void delete(Book book);
     void update(Book book);
     Book getBookByISBN(String isbn);
+    List<Book> getBookByCategory(String category);
     List<Book> getAllBooks();
     List<String> getAllIsbns();
+    List<String> getAllCategories();
 }

@@ -77,6 +77,7 @@ $(document).ready(function() {
     $('#edit').click( function () {
         var row = get_selected_row();
         $("#edit").attr("data-target", "#info_modal");
+        $("#id").val(row.id);
         $("#orderId").val(row.orderId);
         $("#isbn").val(row.isbn);
         $("#quantity").val(row.quantity);

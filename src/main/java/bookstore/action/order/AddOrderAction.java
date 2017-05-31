@@ -49,14 +49,6 @@ public class AddOrderAction extends BaseAction {
         this.total = total;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     public void setAppService(AppService appService) {
         this.appService = appService;
     }

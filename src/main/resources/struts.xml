@@ -11,7 +11,7 @@
     <constant name="struts.convention.classes.reload" value="true" />
 
     <package name="index" extends="struts-default">
-        <action name="index" class="bookstore.action.showBookAtIndex">
+        <action name="index" class="bookstore.action.IndexAction">
             <result>/WEB-INF/index.jsp</result>
         </action>
         <action name="signUp" class="bookstore.action.auth.SignUpAction">

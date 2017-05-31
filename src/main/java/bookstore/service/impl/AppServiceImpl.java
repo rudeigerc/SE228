@@ -74,12 +74,20 @@ public class AppServiceImpl implements AppService {
         return bookDao.getBookByISBN(isbn);
     }
 
+    public List<Book> getBookByCategory(String category) {
+        return bookDao.getBookByCategory(category);
+    }
+
     public List<Book> getAllBooks() {
         return bookDao.getAllBooks();
     }
 
     public List<String> getAllIsbns() {
         return bookDao.getAllIsbns();
+    }
+
+    public List<String> getAllCatagories() {
+        return bookDao.getAllCategories();
     }
 
     /* Order */

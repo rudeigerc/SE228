@@ -4,6 +4,7 @@ import bookstore.dao.BookDao;
 import bookstore.model.Book;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by rudeigerc on 2017/5/26.
@@ -28,6 +29,12 @@ public class BookDaoImpl extends HibernateDaoSupport implements BookDao {
         return book;
     }
 
+    public List<Book> getBookByCategory(String category) {
+        @SuppressWarnings("unchecked")
+        List<Book> books = (List<Book>) getHibernateTemplate().find("from Book as book where book.category=?", category);
+        return books;
+    }
+
     public List<Book> getAllBooks() {
         @SuppressWarnings("unchecked")
         List<Book> books = (List<Book>) getHibernateTemplate().find("from Book");
@@ -38,5 +45,11 @@ public class BookDaoImpl extends HibernateDaoSupport implements BookDao {
         @SuppressWarnings("unchecked")
         List<String> isbns = (List<String>) getHibernateTemplate().find("select isbn from Book");
         return isbns;
+    }
+
+    public List<String> getAllCategories() {
+        @SuppressWarnings("unchecked")
+        List<String> categories = (List<String>) getHibernateTemplate().find("select distinct category from Book");
+        return categories;
     }
 }

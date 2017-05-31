@@ -49,7 +49,6 @@ public class ListOrderDetailAction extends BaseAction {
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         json = gson.toJson(orderItem);
-        System.out.print(json);
         return SUCCESS;
     }
 }

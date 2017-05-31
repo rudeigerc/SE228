@@ -135,13 +135,20 @@ $(document).ready(function() {
                 },
                 "dataSrc": function ( json ) {
                     json = eval("("+json+")");
+                    $.each(json.data, function (i, it) {
+                        it.total = new Decimal(it.quantity).times(new Decimal(it.price)).toString();
+                    });
                     return json.data;
                 }
             },
             "columns": [
                 { "data": "isbn" },
                 { "data": "quantity" },
-                { "data": "price" }
+                { "data": "price" },
+                { "data": "total"}
+            ],
+            "columnDefs": [
+                { "visible": false, "targets": 3 }
             ],
             "paging": false,
             "ordering": false,
@@ -149,7 +156,7 @@ $(document).ready(function() {
             "searching": false,
             "footerCallback": function () {
                 var api = this.api();
-                var total = api.column(2).data().reduce( function (a, b) {
+                var total = api.column(3).data().reduce( function (a, b) {
                         var value = new Decimal(a).plus(new Decimal(b));
                         return value.toString();
                     }, 0 );

@@ -167,9 +167,6 @@
                             <label for="total">Total</label>
                             <input type="text" class="form-control" id="total" name="total" required>
                         </div>
-                        <div class="form-group">
-                            <input type="hidden" class="form-control" id="status" name="status" required>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="info_cancel">Cancel</button>
@@ -195,6 +192,7 @@
                                 <th>ISBN</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
+                                <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
