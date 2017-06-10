@@ -2,12 +2,12 @@ package bookstore.model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Collection;
 
 /**
- * Created by rudeigerc on 2017/5/26.
+ * Created by rudeigerc on 2017/6/11.
  */
 @Entity
-@Table(name = "book", schema = "bookstore")
 public class Book {
     private String title;
     private String author;
@@ -143,4 +143,5 @@ public class Book {
         result = 31 * result + inventory;
         return result;
     }
+
 }

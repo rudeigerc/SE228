@@ -1,18 +1,28 @@
 package bookstore.model;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Collection;
 
 /**
- * Created by rudeigerc on 2017/5/26.
+ * Created by rudeigerc on 2017/6/11.
  */
 @Entity
-@Table(name = "order", schema = "bookstore")
 public class Order {
+    @Expose
     private int orderId;
+    @Expose
     private String username;
+    @Expose
     private String time;
+    @Expose
     private String total;
+    @Expose
     private int status;
+
+    private Collection<OrderItem> orderItemsByOrderId;
 
     public Order() { }
 
@@ -97,5 +107,15 @@ public class Order {
         result = 31 * result + (total != null ? total.hashCode() : 0);
         result = 31 * result + status;
         return result;
+    }
+
+
+    @OneToMany(mappedBy = "orderByOrderId")
+    public Collection<OrderItem> getOrderItemsByOrderId() {
+        return orderItemsByOrderId;
+    }
+
+    public void setOrderItemsByOrderId(Collection<OrderItem> orderItemsByOrderId) {
+        this.orderItemsByOrderId = orderItemsByOrderId;
     }
 }

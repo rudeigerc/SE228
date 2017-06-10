@@ -47,7 +47,7 @@ public class ListOrderDetailAction extends BaseAction {
         Map<String, Object> orderItem = new HashMap<String, Object>();
         orderItem.put("data", data);
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         json = gson.toJson(orderItem);
         return SUCCESS;
     }

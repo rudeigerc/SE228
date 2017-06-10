@@ -3,10 +3,9 @@ package bookstore.model;
 import javax.persistence.*;
 
 /**
- * Created by rudeigerc on 2017/5/21.
+ * Created by rudeigerc on 2017/6/11.
  */
 @Entity
-@Table(name = "user", schema = "bookstore")
 public class User {
     private int uid;
     private String username;
@@ -89,14 +88,14 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User that = (User) o;
+        User user = (User) o;
 
-        if (uid != that.uid) return false;
-        if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (role != null ? !role.equals(that.role) : that.role != null) return false;
+        if (uid != user.uid) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (role != null ? !role.equals(user.role) : user.role != null) return false;
 
         return true;
     }

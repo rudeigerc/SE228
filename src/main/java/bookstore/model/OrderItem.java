@@ -1,18 +1,25 @@
 package bookstore.model;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 
 /**
- * Created by rudeigerc on 2017/5/26.
+ * Created by rudeigerc on 2017/6/11.
  */
 @Entity
-@Table(name = "orderItem", schema = "bookstore")
 public class OrderItem {
+    @Expose
     private int id;
+    @Expose
     private int orderId;
+    @Expose
     private String isbn;
+    @Expose
     private int quantity;
+    @Expose
     private String price;
+    private Order orderByOrderId;
 
     public OrderItem() { }
     public OrderItem(int orderId, String isbn, int quantity, String price) {
@@ -23,7 +30,7 @@ public class OrderItem {
     }
 
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -79,6 +86,7 @@ public class OrderItem {
 
         OrderItem orderItem = (OrderItem) o;
 
+        if (id != orderItem.id) return false;
         if (orderId != orderItem.orderId) return false;
         if (quantity != orderItem.quantity) return false;
         if (isbn != null ? !isbn.equals(orderItem.isbn) : orderItem.isbn != null) return false;
@@ -89,10 +97,23 @@ public class OrderItem {
 
     @Override
     public int hashCode() {
-        int result = orderId;
+        int result = id;
+        result = 31 * result + orderId;
         result = 31 * result + (isbn != null ? isbn.hashCode() : 0);
         result = 31 * result + quantity;
         result = 31 * result + (price != null ? price.hashCode() : 0);
         return result;
     }
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false)
+    public Order getOrderByOrderId() {
+        return orderByOrderId;
+    }
+
+    public void setOrderByOrderId(Order orderByOrderId) {
+        this.orderByOrderId = orderByOrderId;
+    }
+
 }

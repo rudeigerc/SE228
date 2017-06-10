@@ -10,5 +10,11 @@
         <property name="time" column="time"/>
         <property name="total" column="total"/>
         <property name="status" column="status"/>
+        <set name="orderItemsByOrderId" inverse="true">
+            <key>
+                <column name="order_id"/>
+            </key>
+            <one-to-many not-found="ignore" class="bookstore.model.OrderItem"/>
+        </set>
     </class>
 </hibernate-mapping>
