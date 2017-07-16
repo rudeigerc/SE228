@@ -3,6 +3,8 @@ package bookstore.dao.impl;
 import bookstore.dao.BookDao;
 import bookstore.model.Book;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +34,14 @@ public class BookDaoImpl extends HibernateDaoSupport implements BookDao {
     public List<Book> getBookByCategory(String category) {
         @SuppressWarnings("unchecked")
         List<Book> books = (List<Book>) getHibernateTemplate().find("from Book as book where book.category=?", category);
+        return books;
+    }
+
+    public List<Book> getBookByKeyword(String keyword) {
+        keyword = "%" + keyword + "%";
+        String queryString = "from Book as book where book.title like ? or book.author like ? or book.category like ? or book.publisher like ? or book.isbn like ? or book.description like ?";
+        @SuppressWarnings("unchecked")
+        List<Book> books = (List<Book>) getHibernateTemplate().find(queryString , keyword, keyword, keyword, keyword, keyword, keyword);
         return books;
     }
 

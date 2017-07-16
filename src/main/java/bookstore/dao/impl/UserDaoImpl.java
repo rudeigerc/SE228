@@ -9,8 +9,9 @@ import java.util.List;
  * Created by rudeigerc on 2017/5/22.
  */
 public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
-    public void save(User user) {
-        getHibernateTemplate().save(user);
+    public Integer save(User user) {
+        Integer uid = (Integer) getHibernateTemplate().save(user);
+        return uid;
     }
 
     public void delete(User user) {
@@ -24,6 +25,13 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
     public User getUserByUid(int uid) {
         @SuppressWarnings("unchecked")
         List<User> users = (List<User>) getHibernateTemplate().find("from User as user where user.uid=?", uid);
+        User user = users.size() > 0 ? users.get(0) : null;
+        return user;
+    }
+
+    public User getUserByUsername(String username) {
+        @SuppressWarnings("unchecked")
+        List<User> users = (List<User>) getHibernateTemplate().find("from User as user where user.username=?", username);
         User user = users.size() > 0 ? users.get(0) : null;
         return user;
     }

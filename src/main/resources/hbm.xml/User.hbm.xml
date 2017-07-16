@@ -5,7 +5,9 @@
 <hibernate-mapping>
 
     <class name="bookstore.model.User" table="user" schema="bookstore">
-        <id name="uid" column="uid"/>
+        <id name="uid" column="uid">
+            <generator class="native" />
+        </id>
         <property name="username" column="username"/>
         <property name="password" column="password"/>
         <property name="phone" column="phone"/>

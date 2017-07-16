@@ -7,7 +7,7 @@ import bookstore.service.AppService;
 /**
  * Created by rudeigerc on 2017/5/26.
  */
-public class UpdateBookAction extends BaseAction{
+public class UpdateBookAction extends BaseAction {
     private static final long serialVersionUID = 1L;
 
     private String title;
@@ -17,6 +17,7 @@ public class UpdateBookAction extends BaseAction{
     private String publishedDate;
     private String category;
     private String price;
+    private String description;
     private int inventory;
     private AppService appService;
 
@@ -76,6 +77,14 @@ public class UpdateBookAction extends BaseAction{
         this.price = price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getInventory() {
         return inventory;
     }
@@ -98,6 +107,7 @@ public class UpdateBookAction extends BaseAction{
         book.setPublishedDate(publishedDate);
         book.setCategory(category);
         book.setPrice(price);
+        book.setDescription(description);
         book.setInventory(inventory);
         appService.updateBook(book);
         return SUCCESS;

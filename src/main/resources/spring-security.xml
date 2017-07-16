@@ -8,24 +8,42 @@
              http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http auto-config="true">
-        <access-denied-handler error-page="/index"/>
+        <access-denied-handler error-page="/WEB-INF/error/403.jsp"/>
+        <intercept-url pattern="/WEB-INF/error/403.jsp" access="permitAll" />
+        <intercept-url pattern="/WEB-INF/error/404.jsp" access="permitAll" />
+
+        <intercept-url pattern="/css/**" access="permitAll"/>
+        <intercept-url pattern="/fonts/**" access="permitAll"/>
+        <intercept-url pattern="/icon/**" access="permitAll"/>
+        <intercept-url pattern="/image/**" access="permitAll"/>
+        <intercept-url pattern="/js/**" access="permitAll"/>
+        <intercept-url pattern="/json/**" access="permitAll"/>
         <intercept-url pattern="/index" access="permitAll" />
+        <intercept-url pattern="/auth" access="permitAll" />
+
+        <intercept-url pattern="/settings" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/detail" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/updateUserInfo" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/createOrder" access="hasRole('ROLE_USER')" />
+
         <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
 
-
         <form-login
-                login-page="/index"
+                login-page="/auth"
                 login-processing-url="/login"
                 default-target-url="/index"
-                authentication-failure-url="/index?login=error"
+                authentication-failure-url="/auth?login=error"
                 username-parameter="login_username"
-                password-parameter="login_password" />
+                password-parameter="login_password"
+                authentication-success-handler-ref="customAuthenticationSuccessHandler" />
         <logout logout-url="/logout"
                 logout-success-url="/index"
                 invalidate-session="true" />
         <csrf disabled="true"/>
 
     </http>
+
+    <beans:bean id="customAuthenticationSuccessHandler" class="bookstore.auth.CustomSimpleUrlAuthenticationSuccessHandler" />
 
     <authentication-manager>
         <authentication-provider>

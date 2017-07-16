@@ -13,5 +13,6 @@
         <property name="category" column="category"/>
         <property name="price" column="price"/>
         <property name="inventory" column="inventory"/>
+        <property name="description" column="description"/>
     </class>
 </hibernate-mapping>

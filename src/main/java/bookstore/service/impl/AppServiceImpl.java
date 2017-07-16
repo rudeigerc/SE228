@@ -1,14 +1,9 @@
 package bookstore.service.impl;
 
-import bookstore.dao.OrderItemDao;
-import bookstore.model.Book;
-import bookstore.model.Order;
-import bookstore.model.OrderItem;
-import bookstore.model.User;
+import bookstore.dao.*;
+import bookstore.model.*;
 import bookstore.service.AppService;
-import bookstore.dao.BookDao;
-import bookstore.dao.UserDao;
-import bookstore.dao.OrderDao;
+
 import java.util.List;
 
 /**
@@ -19,6 +14,7 @@ public class AppServiceImpl implements AppService {
     private BookDao bookDao;
     private OrderDao orderDao;
     private OrderItemDao orderItemDao;
+    private UserInfoDao userInfoDao;
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
@@ -30,10 +26,14 @@ public class AppServiceImpl implements AppService {
 
     public void setOrderItemDao(OrderItemDao orderItemDao) { this.orderItemDao = orderItemDao; }
 
+    public void setUserInfoDao(UserInfoDao userInfoDao) {
+        this.userInfoDao = userInfoDao;
+    }
+
     /* User */
 
-    public void addUser(User user) {
-        userDao.save(user);
+    public Integer addUser(User user) {
+        return userDao.save(user);
     }
 
     public void deleteUser(User user) {
@@ -48,12 +48,36 @@ public class AppServiceImpl implements AppService {
         return userDao.getUserByUid(uid);
     }
 
+    public User getUserByUsername(String username) {
+        return userDao.getUserByUsername(username);
+    }
+
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
     }
 
     public List<String> getAllUsernames() {
         return userDao.getAllUsernames();
+    }
+
+    public void addUserInfo(UserInfo userInfo) {
+        userInfoDao.addUserInfo(userInfo);
+    }
+
+    public void deleteUserInfo(UserInfo userInfo) {
+        userInfoDao.deleteUserInfo(userInfo);
+    }
+
+    public void updateUserInfo(UserInfo userInfo) {
+        userInfoDao.updateUserInfo(userInfo);
+    }
+
+    public UserInfo getUserInfoByUid(int uid) {
+        return userInfoDao.getUserInfoByUid(uid);
+    }
+
+    public List<UserInfo> getAllUserInfos() {
+        return userInfoDao.getAllUserInfos();
     }
 
     /* Book */
@@ -78,6 +102,10 @@ public class AppServiceImpl implements AppService {
         return bookDao.getBookByCategory(category);
     }
 
+    public List<Book> getBookByKeyword(String keyword) {
+        return bookDao.getBookByKeyword(keyword);
+    }
+
     public List<Book> getAllBooks() {
         return bookDao.getAllBooks();
     }
@@ -92,8 +120,8 @@ public class AppServiceImpl implements AppService {
 
     /* Order */
 
-    public void addOrder(Order order) {
-        orderDao.save(order);
+    public Integer addOrder(Order order) {
+        return orderDao.save(order);
     }
 
     public void deleteOrder(Order order) {
@@ -141,5 +169,6 @@ public class AppServiceImpl implements AppService {
     public List<OrderItem> getAllOrderItems() {
         return orderItemDao.getAllOrderItems();
     }
+
 
 }

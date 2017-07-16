@@ -5,7 +5,9 @@
 <hibernate-mapping>
 
     <class name="bookstore.model.Order" table="`order`" schema="bookstore">
-        <id name="orderId" column="order_id"/>
+        <id name="orderId" column="order_id">
+            <generator class="native" />
+        </id>
         <property name="username" column="username"/>
         <property name="time" column="time"/>
         <property name="total" column="total"/>

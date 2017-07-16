@@ -10,7 +10,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="A naive web bookstore.">
     <meta name="author" content="Yuchen Cheng">
     <link rel="icon" href="<%=request.getContextPath()%>/icon/data_celtic_knot.ico">
@@ -25,7 +24,7 @@
     <link href="<%=request.getContextPath()%>/css/datatables.min.css" rel="stylesheet">
 
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/datatables.min.js"></script>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/js/validator.min.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/js/decimal.min.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery.spinner.js"></script>
 </head>
 
@@ -39,12 +38,6 @@
         }
         if (request.getAttribute("categories") != null) {
             categoryList = (ArrayList<String>) request.getAttribute("categories");
-        }
-        if ("error".equals(request.getParameter("signup"))) {
-            response.getWriter().println("<script>alert('Sorry, the username has been used')</script>");
-        }
-        if ("error".equals(request.getParameter("login"))) {
-            response.getWriter().println("<script>alert('Invalid username or password')</script>");
         }
         if (request.getUserPrincipal() != null) {
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -61,11 +54,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<%=request.getContextPath()%>">Bookstore</a>
+                <a class="navbar-brand" href="<%=request.getContextPath()%>/index">Bookstore</a>
             </div>
             <div id="_navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="index">Home<span class="sr-only">(current)</span></a></li>
+                    <li><a href="<%=request.getContextPath()%>/index">Home<span class="sr-only">(current)</span></a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -82,17 +75,17 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right navbar-form">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search">
+                        <input type="text" class="form-control" placeholder="Search" id="keyword" name="keyword">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default">Submit</button>
+                            <button type="button" class="btn btn-default" id="search">Submit</button>
                         </span>
                     </div>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default">
+                        <button type="button" class="btn btn-default" id="btn-cart" data-toggle="modal" data-target="#cart_modal">
                             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                            <span class="badge">0</span>
+                            <span class="badge" id="cart_badge">{{ count }}</span>
                         </button>
-                        <div class="btn-group" role="group">
+                        <div class="btn-group" role="group" id="_login">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                 <%=username%>
@@ -107,7 +100,7 @@
                                     Manage
                                 </a></li>
                                 <% } else if (authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) { %>
-                                <li><a href="<%=request.getContextPath()%>/index"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                                <li><a href="<%=request.getContextPath()%>/settings"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
                                     Settings
                                 </a></li>
                                 <% } %>
@@ -136,7 +129,7 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="index">Home<span class="sr-only">(current)</span></a></li>
+                    <li><a href="<%=request.getContextPath()%>/index">Home<span class="sr-only">(current)</span></a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -151,15 +144,13 @@
                         </ul>
                     </li>
                 </ul>
-                <form class="navbar-form navbar-right" id="login_form" action="login" method="post">
-                    <div class="form-group">
-                        <input type="text" placeholder="Username" class="form-control" id="login_username" name="login_username">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" placeholder="Password" class="form-control" id="login_password" name="login_password">
-                    </div>
-                    <button type="submit" class="btn btn-success" id="sign_in" >Sign in</button>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signup_modal">Sign up</button>
+                <form class="navbar-form navbar-right">
+                    <button type="button" class="btn btn-default" id="btn-cart" data-toggle="modal" data-target="#cart_modal">
+                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                        <span class="badge" id="cart_badge">{{ count }}</span>
+                    </button>
+                    <a type="button" class="btn btn-success" href="<%=request.getContextPath()%>/auth">Log in</a>
+                    <a type="button" class="btn btn-primary" href="<%=request.getContextPath()%>/auth">Sign up</a>
                 </form>
             </div>
         </div>
@@ -217,7 +208,7 @@
         <%
             for (Book book : bookList) {
         %>
-        <div class="row">
+        <div class="row" style="margin-bottom: 10px; margin-top: 10px;" id="B_<%=book.getIsbn()%>">
             <div class="col-md-3">
                 <img src="<%=request.getContextPath()%>/image/<%=book.getIsbn()%>.jpg" style="width: 200px; height: 200px;" class="img-rounded">
             </div>
@@ -226,23 +217,18 @@
                 <h5><%=book.getAuthor()%></h5>
                 <h4>$<%=book.getPrice()%></h4>
                 <p class="text-danger"><%=book.getInventory()%> left in stock</p>
-                <form id="toCart" role="form">
-                    <div class="input-group spinner input-group-sm" data-trigger="spinner" style="width: 90px; ">
-                        <input type="text" class="form-control text-center" value="1" data-rule="quantity" max="<%=book.getInventory()%>">
-                        <div class="input-group-addon">
-                            <a href="javascript:" class="spin-up" data-spin="up"><i class="fa fa-caret-up" aria-hidden="true" style="margin-top: 0"></i></a>
-                            <a href="javascript:" class="spin-down" data-spin="down"><i class="fa fa-caret-down" aria-hidden="true" style="margin-top: 0"></i></a>
-                        </div>
-                    </div>
-                    <button class="btn btn-default" role="button" disabled="disabled">
-                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                        Add to Cart
+                <div>
+                    <label for="quantity_<%=book.getIsbn()%>"></label>
+                    <input id="quantity_<%=book.getIsbn()%>" type="number" class="form-control text-center quantity" value="1" min="0" max="<%=book.getInventory()%>" style="width: 60px; display: inline;">
+                    <button class="btn btn-default btn-add-to-cart" role="button">
+                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to Cart
                     </button>
-                </form>
-
+                    <button class="btn btn-primary btn-detail" role="button" data-toggle="modal" data-target="#detail_modal">
+                        <span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp;Detail
+                    </button>
+                </div>
             </div>
         </div>
-        <h1></h1>
         <%
             }
         %>
@@ -253,73 +239,291 @@
     </div> <!-- /container -->
 
 
-    <div class="modal fade" id="signup_modal" tabindex="-1" role="dialog" aria-labelledby="info_title" aria-hidden="true">
-        <div class="modal-dialog" style="width:500px;">
-            <div class="modal-content">
+    <div class="modal fade" id="detail_modal" tabindex="-1" role="dialog" aria-labelledby="detail_title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" v-if="detail !== null">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="info_cross">&times;</button>
-                    <h4 class="modal-title" id="info_title">Create an Account</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="detail_title">
+                        <span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp;{{ detail.title }}
+                    </h4>
                 </div>
-                <form id="user_form" data-toggle="validator" role="form">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
-                            <span id="username_help" class="help-block">This will be your username.</span>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <img src="" :src="'<%=request.getContextPath()%>/image/' + detail.isbn + '.jpg'" style="width: 200px; height: 200px;" class="img-rounded">
                         </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" data-minlength="6" required>
-                            <span id="password_help" class="help-block">Use at least one lowercase letter, one numeral, and six characters.</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="text" class="form-control" id="phone" name="phone" required>
-                            <span id="phone_help" class="help-block">Only support the phone numbers used in the People's Republic of China.</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">E-mail</label>
-                            <input type="email" class="form-control" id="email" name="email" data-error="The E-mail address is invalid." required>
-                            <span id="email_help" class="help-block with-errors">We promise not to share your email with anyone.</span>
+                        <div class="col-sm-8">
+                            <strong>Author: </strong>{{ detail.author }}<br>
+                            <strong>ISBN: </strong>{{ detail.isbn }}<br>
+                            <strong>Publisher: </strong>{{ detail.publisher }}<br>
+                            <strong>Published Date: </strong>{{ detail.publishedDate }}<br>
+                            <strong>Category: </strong>{{ detail.category }}<br>
+                            <strong>Price: </strong>{{ detail.price }}<br>
+                            <strong>Inventory: </strong>{{ detail.inventory }}<br>
+                            <!--
+                            <div style="margin-top: 10px;">
+                                <label :for="'_quantity_' + detail.isbn"></label>
+                                <input :id="'_quantity_' + detail.isbn" type="number" class="form-control text-center" :value="1" min="0" :max="detail.inventory" style="width: 60px; display: inline;">
+                                <button class="btn btn-default" role="button">
+                                    <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to Cart
+                                </button>
+                            </div>
+                            -->
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" id="info_cancel">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="info_submit">Sign up</button>
+                    <div class="row" style="margin: 10px;">
+                        <div v-if="detail.description !== undefined">
+                            <blockquote>{{ detail.description }}</blockquote>
+                        </div>
+                        <div v-else="">
+                            <blockquote>No description.</blockquote>
+                        </div>
                     </div>
-                </form>
-
+                </div>
             </div>
         </div>
     </div>
 
+    <div class="modal fade" id="cart_modal" tabindex="-1" role="dialog" aria-labelledby="cart_title" aria-hidden="true">
+        <div class="modal-dialog" style="width: 800px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="cart_title">
+                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Cart
+                    </h4>
+                </div>
+                <div class="modal-body" v-if="book.length !== 0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="cart">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Title</th>
+                                <th>ISBN</th>
+                                <th>Price</th>
+                                <th>Amount</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="_book in book" :id="'C_' + _book.isbn">
+                                <td>
+                                    <label for="order_check"></label>
+                                    <input type="checkbox" id="order_check" checked>
+                                </td>
+                                <td>{{ _book.title }}</td>
+                                <td>{{ _book.isbn }}</td>
+                                <td>{{ _book.price }}</td>
+                                <td>{{ _book.amount }}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-cart-delete" @click="deleteFromCart">
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th colspan="4" style="text-align:right">Total:</th>
+                                <th>{{ total }}</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-body" v-else="">
+                    <div class="alert alert-info" role="alert">No book in the cart.</div>
+                </div>
+                <div class="modal-footer" v-if="book.length !== 0">
+                    <button class="btn btn-default" id="proceed" @click="proceed">
+                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span>&nbsp;Proceed to checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
-
-<script>
-    $(document).ready(function() {
-        $('#info_submit').click(function () {
-            var form_data = $('#user_form').serialize();
-            $.ajax({
-                url: "signUp",
-                data: form_data,
-                type: "post",
-                success: function (data) {
-                    $('#signup_modal').modal('hide');
-                    location.reload();
-                }
-            })
-        });
-    });
-</script>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script>window.jQuery || document.write('<script src="docs/assets/js/vendor/jquery.min.js"><\/script>')</script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="<%=request.getContextPath()%>/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
+<script type="text/javascript">
 
+    $(document).ready(function() {
+        $('#search').click(function() {
+            var keyword = $('#keyword').val();
+            window.location.href = window.location.href + "?keyword=" + keyword;
+            $('#keyword').val(keyword);
+        });
+
+        $(document).keydown(function(event){
+            if( event.keyCode === 13 ) {
+                $("#search").trigger("click");
+            }
+        });
+
+        $.ajax({
+            url: "cart",
+            type: "get",
+            success: function (data) {
+                cart.book = [];
+                json = JSON.parse(data);
+                for (var _json in json) {
+                    cart.book.push(JSON.parse(json[_json]));
+                }
+                badge.count = cart.book.length;
+            }
+        });
+
+        var detail = new Vue({
+            el: '#detail_modal',
+            data: {
+                detail: null
+            }
+        });
+
+        var cart_table = $('#cart').DataTable( {
+            "columns": [
+                { "data": "check" },
+                { "data": "title" },
+                { "data": "isbn" },
+                { "data": "price" },
+                { "data": "amount" },
+                { "data": "delete" }
+            ],
+            "paging": false,
+            "info": false,
+            "ordering": false,
+            "searching": false
+        } );
+
+        var cart = new Vue({
+            el: '#cart_modal',
+            data: {
+                book: []
+            },
+            computed: {
+                total: function() {
+                    var total = new Decimal(0);
+                    for (var _book in this.book) {
+                        var amount = this.book[_book].amount;
+                        var price = this.book[_book].price;
+                        var tmp = new Decimal(price).times(amount);
+                        total = Decimal.add(total, tmp);
+                    }
+                    return total.toString();
+                }
+            },
+            methods: {
+                deleteFromCart: function(e) {
+                    var isbn = e.currentTarget.parentElement.parentElement.id.replace('C_', '');
+                    $.ajax({
+                        url: "deleteFromCart",
+                        type: "post",
+                        data: {
+                            isbn: isbn
+                        },
+                        success: function() {
+                            alert("The book was deleted from the cart successfully.");
+                            location.reload();
+                        }
+                    })
+                },
+                proceed: function() {
+                    if ($('#_login')[0] === undefined) {
+                        window.location.href = "/auth"
+                    }
+                    var json = [];
+                    var total = new Decimal(0);
+                    $("#cart").find('tbody tr').each(function() {
+                        var checked = $(this).children('td:eq(0)')[0].lastChild.checked;
+                        if (!checked) return;
+
+                        var object = {};
+                        var isbn = $(this).children('td:eq(2)').text();
+                        var price = $(this).children('td:eq(3)').text();
+                        var amount = parseInt($(this).children('td:eq(4)').text());
+                        object.isbn = isbn;
+                        object.price = price;
+                        object.amount = amount;
+                        var tmp = new Decimal(price).times(amount);
+                        total = Decimal.add(total, tmp);
+                        json.push(object);
+                    });
+                    var str = JSON.stringify(json);
+                    $.ajax({
+                        url: "createOrder",
+                        type: "post",
+                        data: {
+                            json: str,
+                            total: total.toString()
+                        },
+                        success: function(data) {
+                            alert("The order was created.");
+                            location.reload();
+                        }
+                    })
+                }
+            }
+        });
+
+        var badge = new Vue({
+            el: '#cart_badge',
+            data: {
+                count: 0
+            }
+        });
+
+        $('.btn-detail').click(function() {
+            var isbn = this.parentElement.parentElement.parentElement.id.replace('B_', '');
+            $.ajax({
+                url: "bookDetail",
+                type: "get",
+                data: {
+                    isbn: isbn
+                },
+                success: function (data) {
+                    detail.detail = JSON.parse(data).book;
+                }
+            })
+        });
+
+        $('.btn-add-to-cart').click(function() {
+            var isbn = this.parentElement.parentElement.parentElement.id.replace('B_', '');
+            var amount = $(this.previousElementSibling).val();
+            $.ajax({
+                url: "addToCart",
+                type: "post",
+                data: {
+                    isbn: isbn,
+                    amount: amount
+                },
+                success: function() {
+                    alert("The book was added to the cart successfully.");
+                    location.reload();
+                }
+            })
+        });
+
+        $('.quantity').bind('input propertychange', function() {
+            if ($(this).val() === "0" ) {
+                $(this.nextElementSibling).attr('disabled', 'disabled');
+            } else {
+                $(this.nextElementSibling).removeAttr('disabled');
+            }
+        });
+
+
+    });
+
+</script>
 
 </html>

@@ -2,6 +2,7 @@ package bookstore.action.auth;
 
 import bookstore.action.BaseAction;
 import bookstore.model.User;
+import bookstore.model.UserInfo;
 import bookstore.service.AppService;
 
 /**
@@ -56,8 +57,9 @@ public class SignUpAction extends BaseAction {
     @Override
     public String execute() throws Exception {
         User user = new User(username, password, phone, email, "ROLE_USER");
-
-        appService.addUser(user);
+        Integer uid = appService.addUser(user);
+        UserInfo userinfo = new UserInfo(uid, "", username, "");
+        appService.addUserInfo(userinfo);
         return SUCCESS;
 
     }

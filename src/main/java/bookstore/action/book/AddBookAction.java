@@ -20,6 +20,7 @@ public class AddBookAction extends BaseAction {
     private String category;
     private String price;
     private int inventory;
+    private String description;
     private AppService appService;
 
     public String getTitle() {
@@ -78,6 +79,14 @@ public class AddBookAction extends BaseAction {
         this.price = price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getInventory() {
         return inventory;
     }
@@ -92,7 +101,7 @@ public class AddBookAction extends BaseAction {
 
     @Override
     public String execute() throws Exception {
-        Book book = new Book(title, author, isbn, publisher, publishedDate, category, price, inventory);
+        Book book = new Book(title, author, isbn, publisher, publishedDate, category, price, description, inventory);
         appService.addBook(book);
         return SUCCESS;
     }

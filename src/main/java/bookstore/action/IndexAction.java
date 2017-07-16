@@ -7,10 +7,12 @@ import java.util.List;
 /**
  * Created by rudeigerc on 2017/5/27.
  */
-public class IndexAction extends BaseAction{
+public class IndexAction extends BaseAction {
     private static final long serialVersionUID = 1L;
 
     String category;
+
+    String keyword;
 
     public String getCategory() {
         return category;
@@ -18,6 +20,14 @@ public class IndexAction extends BaseAction{
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     private AppService appService;
@@ -29,8 +39,11 @@ public class IndexAction extends BaseAction{
     @Override
     public String execute() throws Exception {
         List<Book> books;
-        if (category != null) {
+        if (category != null && keyword == null) {
             books = appService.getBookByCategory(category);
+        }
+        else if (keyword != null && category == null) {
+            books = appService.getBookByKeyword(keyword);
         }
         else {
             books = appService.getAllBooks();

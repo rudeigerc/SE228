@@ -1,9 +1,7 @@
 package bookstore.service;
 import java.util.List;
-import bookstore.model.User;
-import bookstore.model.Book;
-import bookstore.model.Order;
-import bookstore.model.OrderItem;
+
+import bookstore.model.*;
 
 /**
  * Created by rudeigerc on 2017/5/22.
@@ -11,7 +9,7 @@ import bookstore.model.OrderItem;
 public interface AppService {
 
     /* User */
-    void addUser(User user);
+    Integer addUser(User user);
 
     void deleteUser(User user);
 
@@ -19,9 +17,21 @@ public interface AppService {
 
     User getUserByUid(int uid);
 
+    User getUserByUsername(String username);
+
     List<User> getAllUsers();
 
     List<String> getAllUsernames();
+
+    void addUserInfo(UserInfo userInfo);
+
+    void deleteUserInfo(UserInfo userInfo);
+
+    void updateUserInfo(UserInfo userInfo);
+
+    UserInfo getUserInfoByUid(int uid);
+
+    List<UserInfo> getAllUserInfos();
 
     /* Book */
     void addBook(Book book);
@@ -34,6 +44,8 @@ public interface AppService {
 
     List<Book> getBookByCategory(String category);
 
+    List<Book> getBookByKeyword(String keyword);
+
     List<Book> getAllBooks();
 
     List<String> getAllIsbns();
@@ -41,7 +53,7 @@ public interface AppService {
     List<String> getAllCatagories();
 
     /* Order */
-    void addOrder(Order order);
+    Integer addOrder(Order order);
 
     void deleteOrder(Order order);
 

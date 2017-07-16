@@ -1,0 +1,56 @@
+@font-face {
+    font-family: 'Nanum Brush Script';
+    src:url('../fonts/NanumBrushScript-Regular.ttf');
+    src:url('../fonts/NanumBrushScript-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.nbs {
+    display: inline-block;
+    font: normal normal normal 14px/1 'Nanum Brush Script';
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.img-150px {
+    width: 150px;
+    height: 150px;
+}
+
+.file-chooser {
+    position:absolute;
+    width: 150px;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    opacity: 0.0001;
+    height: 38px;
+}
+
+.file-chooser:hover {
+    cursor: inherit;
+}
+
+.file-chooser-label {
+    width: 150px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.file-chooser-label:hover {
+    cursor: inherit;
+}
+
+.btn-file-upload {
+    margin-top: 10px;
+}

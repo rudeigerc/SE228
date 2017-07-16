@@ -16,11 +16,12 @@ public class Book {
     private String publishedDate;
     private String category;
     private String price;
+    private String description;
     private int inventory;
 
     public Book() {}
 
-    public Book(String title, String author, String isbn, String publisher, String publishedDate, String category, String price, int inventory) {
+    public Book(String title, String author, String isbn, String publisher, String publishedDate, String category, String price, String description, int inventory) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
@@ -28,6 +29,7 @@ public class Book {
         this.publishedDate = publishedDate;
         this.category = category;
         this.price = price;
+        this.description = description;
         this.inventory = inventory;
     }
 
@@ -102,6 +104,16 @@ public class Book {
     }
 
     @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Basic
     @Column(name = "inventory")
     public int getInventory() {
         return inventory;
@@ -126,6 +138,7 @@ public class Book {
         if (publishedDate != null ? !publishedDate.equals(book.publishedDate) : book.publishedDate != null)
             return false;
         if (category != null ? !category.equals(book.category) : book.category != null) return false;
+        if (description != null ? !description.equals(book.description) : book.description != null) return false;
         if (price != null ? !price.equals(book.price) : book.price != null) return false;
 
         return true;
@@ -140,6 +153,7 @@ public class Book {
         result = 31 * result + (publishedDate != null ? publishedDate.hashCode() : 0);
         result = 31 * result + (category != null ? category.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + inventory;
         return result;
     }

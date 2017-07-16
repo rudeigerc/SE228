@@ -3,14 +3,17 @@ package bookstore.dao.impl;
 import bookstore.dao.OrderDao;
 import bookstore.model.Order;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by rudeigerc on 2017/5/28.
  */
 public class OrderDaoImpl extends HibernateDaoSupport implements OrderDao {
-    public void save(Order order) {
-        getHibernateTemplate().save(order);
+    public Integer save(Order order) {
+        Integer orderId = (Integer)getHibernateTemplate().save(order);
+        return orderId;
     }
 
     public void delete(Order order) {

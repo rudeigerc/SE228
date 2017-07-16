@@ -13,6 +13,7 @@ public interface BookDao {
     void update(Book book);
     Book getBookByISBN(String isbn);
     List<Book> getBookByCategory(String category);
+    List<Book> getBookByKeyword(String keyword);
     List<Book> getAllBooks();
     List<String> getAllIsbns();
     List<String> getAllCategories();

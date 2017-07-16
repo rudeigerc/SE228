@@ -7,17 +7,105 @@
 <struts>
     <constant name="struts.i18n.encoding" value="UTF-8"/>
     <constant name="struts.objectFactory" value="spring" />
-    <constant name="struts.devMode" value="true" />
+    <constant name="struts.devMode" value="false" />
     <constant name="struts.convention.classes.reload" value="true" />
 
-    <package name="index" extends="struts-default">
+    <package name="error" extends="struts-default">
+        <global-results>
+            <result name="error" type="httpheader">
+                <param name="error">404</param>
+            </result>
+        </global-results>
+        <global-exception-mappings>
+            <exception-mapping result="error" exception="java.lang.Exception">
+
+            </exception-mapping>
+        </global-exception-mappings>
+    </package>
+
+    <package name="index" namespace="/" extends="json-default">
         <action name="index" class="bookstore.action.IndexAction">
             <result>/WEB-INF/index.jsp</result>
         </action>
+        <action name="bookDetail" class="bookstore.action.book.getBookDetailAction">
+            <result name="success" type="json">
+                <param name="root">json</param>
+            </result>
+        </action>
         <action name="signUp" class="bookstore.action.auth.SignUpAction">
-            <result name="error">/WEB-INF/index.jsp?signup=error</result>
-            <result name="success">/WEB-INF/index.jsp</result>
-            <exception-mapping exception="org.springframework.dao.DataIntegrityViolationException" result="error"/>
+            <result>/WEB-INF/auth.jsp</result>
+        </action>
+    </package>
+
+    <package name="auth" extends="json-default">
+        <action name="auth">
+            <result>/WEB-INF/auth.jsp</result>
+        </action>
+        <action name="validate" class="bookstore.action.auth.ValidateAction">
+            <result name="success" type="httpheader">200</result>
+            <result name="error" type="httpheader">
+                <param name="error">409</param>
+            </result>
+        </action>
+    </package>
+
+    <package name="cart" extends="json-default">
+        <action name="addToCart" class="bookstore.action.cart.AddToCartAction">
+            <result>/WEB-INF/index.jsp</result>
+            <result name="error" type="httpheader">
+                <param name="status">404</param>
+            </result>
+        </action>
+        <action name="cart" class="bookstore.action.cart.GetCartAction">
+            <result name="success" type="json">
+                <param name="root">json</param>
+            </result>
+        </action>
+        <action name="deleteFromCart" class="bookstore.action.cart.DeleteFromCartAction">
+            <result>/WEB-INF/index.jsp</result>
+            <result name="error" type="httpheader">
+                <param name="status">404</param>
+            </result>
+        </action>
+        <action name="createOrder" class="bookstore.action.cart.CreateOrderAction">
+            <result>/WEB-INF/index.jsp</result>
+            <result name="error" type="httpheader">
+                <param name="status">404</param>
+            </result>
+        </action>
+    </package>
+
+    <package name="settings" extends="json-default">
+        <action name="settings">
+            <result>/WEB-INF/settings.jsp</result>
+        </action>
+        <action name="detail" class="bookstore.action.userInfo.GetUserInfoAction">
+            <result name="success" type="json">
+                <param name="root">json</param>
+            </result>
+        </action>
+        <action name="updateUserInfo" class="bookstore.action.userInfo.UpdateUserInfoAction">
+            <result name="success">/WEB-INF/settings.jsp</result>
+        </action>
+        <action name="updatePassword" class="bookstore.action.auth.UpdatePasswordAction">
+            <result name="success">/WEB-INF/settings.jsp</result>
+            <result name="error" type="httpheader">
+                <param name="status">404</param>
+            </result>
+        </action>
+    </package>
+
+    <package name="avatar" extends="struts-default">
+        <action name="uploadAvatar" class="bookstore.action.userInfo.UploadAvatarAction">
+            <interceptor-ref name="fileUpload">
+                <param name="allowedTypes">image/x-ms-bmp, image/jpeg, image/gif, image/png, image/x-png</param>
+                <param name="maximumSize">2048000</param>
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack">
+
+            </interceptor-ref>
+            <param name="savePath">/image</param>
+            <result name="success">/WEB-INF/settings.jsp</result>
         </action>
     </package>
 
@@ -93,4 +181,7 @@
         </action>
         -->
     </package>
+
+
 </struts>
+
