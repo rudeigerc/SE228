@@ -17,4 +17,5 @@ public interface BookDao {
     List<Book> getAllBooks();
     List<String> getAllIsbns();
     List<String> getAllCategories();
+    List<Object> getBookStat();
 }

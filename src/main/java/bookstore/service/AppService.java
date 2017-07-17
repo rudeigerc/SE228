@@ -52,6 +52,8 @@ public interface AppService {
 
     List<String> getAllCatagories();
 
+    List<Object> getBookStat();
+
     /* Order */
     Integer addOrder(Order order);
 

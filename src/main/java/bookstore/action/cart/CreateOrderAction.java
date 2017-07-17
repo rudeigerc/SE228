@@ -53,6 +53,10 @@ public class CreateOrderAction extends BaseAction {
     @Override
     public String execute() throws Exception {
 
+        if (total.equals("0")) {
+            return ERROR;
+        }
+
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
         Date date = new Date();
@@ -66,10 +70,6 @@ public class CreateOrderAction extends BaseAction {
         map = (Map<String, Integer>) session.getAttribute("cart");
 
         JsonArray jsonArray = new JsonParser().parse(json).getAsJsonArray();
-
-        if (jsonArray == null) {
-            return ERROR;
-        }
 
         for (JsonElement jsonElement : jsonArray) {
 

@@ -360,7 +360,7 @@
     $(document).ready(function() {
         $('#search').click(function() {
             var keyword = $('#keyword').val();
-            window.location.href = window.location.href + "?keyword=" + keyword;
+            window.location.href = "index?keyword=" + keyword;
             $('#keyword').val(keyword);
         });
 
@@ -439,7 +439,8 @@
                 },
                 proceed: function() {
                     if ($('#_login')[0] === undefined) {
-                        window.location.href = "/auth"
+                        window.location.href = "auth";
+                        return;
                     }
                     var json = [];
                     var total = new Decimal(0);
@@ -466,9 +467,12 @@
                             json: str,
                             total: total.toString()
                         },
-                        success: function(data) {
+                        success: function() {
                             alert("The order was created.");
                             location.reload();
+                        },
+                        error: function() {
+                            alert("Please select the books to be ordered.")
                         }
                     })
                 }
@@ -514,7 +518,8 @@
         });
 
         $('.quantity').bind('input propertychange', function() {
-            if ($(this).val() === "0" ) {
+            var inventory = $(this.parentElement.parentElement.children[3]).text().split(' ')[0];
+            if (String($(this).val() | 0) !== $(this).val() || $(this).val() <= "0" || parseInt($(this).val()) > parseInt(inventory)) {
                 $(this.nextElementSibling).attr('disabled', 'disabled');
             } else {
                 $(this.nextElementSibling).removeAttr('disabled');

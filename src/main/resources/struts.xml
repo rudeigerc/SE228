@@ -113,6 +113,11 @@
         <action name="admin">
             <result>/WEB-INF/admin/admin.jsp</result>
         </action>
+        <action name="stat" class="bookstore.action.stat.GetBookStatAction">
+            <result name="success" type="json">
+                <param name="root">json</param>
+            </result>
+        </action>
         <!-- User -->
         <action name="user" class="bookstore.action.user.ListUserAction">
             <result name="success">/WEB-INF/admin/user.jsp</result>

@@ -3,7 +3,9 @@ package bookstore.service.impl;
 import bookstore.dao.*;
 import bookstore.model.*;
 import bookstore.service.AppService;
+import com.mysql.cj.jdbc.CallableStatement;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 /**
@@ -15,6 +17,8 @@ public class AppServiceImpl implements AppService {
     private OrderDao orderDao;
     private OrderItemDao orderItemDao;
     private UserInfoDao userInfoDao;
+
+    private DataSource dataSource;
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
@@ -116,6 +120,10 @@ public class AppServiceImpl implements AppService {
 
     public List<String> getAllCatagories() {
         return bookDao.getAllCategories();
+    }
+
+    public List<Object> getBookStat() {
+        return bookDao.getBookStat();
     }
 
     /* Order */

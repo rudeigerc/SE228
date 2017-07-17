@@ -38,6 +38,10 @@ public class BookDaoImpl extends HibernateDaoSupport implements BookDao {
     }
 
     public List<Book> getBookByKeyword(String keyword) {
+        if (keyword.equals("")) {
+            List<Book> _book = new ArrayList<Book>();
+            return _book;
+        }
         keyword = "%" + keyword + "%";
         String queryString = "from Book as book where book.title like ? or book.author like ? or book.category like ? or book.publisher like ? or book.isbn like ? or book.description like ?";
         @SuppressWarnings("unchecked")
@@ -61,5 +65,11 @@ public class BookDaoImpl extends HibernateDaoSupport implements BookDao {
         @SuppressWarnings("unchecked")
         List<String> categories = (List<String>) getHibernateTemplate().find("select distinct category from Book");
         return categories;
+    }
+
+    public List<Object> getBookStat() {
+        @SuppressWarnings("unchecked")
+        List<Object> stat = (List<Object>) getHibernateTemplate().find("select o.username, o.time, b.title, b.category, oi.quantity, oi.price from Order as o join OrderItem as oi on o.orderId = oi.orderId join Book as b on oi.isbn = b.isbn");
+        return stat;
     }
 }

@@ -24,6 +24,7 @@
         <intercept-url pattern="/settings" access="hasRole('ROLE_USER')" />
         <intercept-url pattern="/detail" access="hasRole('ROLE_USER')" />
         <intercept-url pattern="/updateUserInfo" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/uploadAvatar" access="hasRole('ROLE_USER')" />
         <intercept-url pattern="/createOrder" access="hasRole('ROLE_USER')" />
 
         <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />

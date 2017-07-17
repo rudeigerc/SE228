@@ -2,6 +2,7 @@ package bookstore.action.user;
 
 import bookstore.action.BaseAction;
 import bookstore.model.User;
+import bookstore.model.UserInfo;
 import bookstore.service.AppService;
 
 /**
@@ -29,7 +30,9 @@ public class DeleteUserAction extends BaseAction {
     @Override
     public String execute() throws Exception {
         User user = appService.getUserByUid(uid);
+        UserInfo userInfo = appService.getUserInfoByUid(uid);
         appService.deleteUser(user);
+        appService.deleteUserInfo(userInfo);
         return SUCCESS;
     }
 
