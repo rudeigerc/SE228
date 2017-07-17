@@ -1,4 +1,5 @@
 # Bookstore
+A naive web bookstore.
 ## Technique
 ### Front-End
 - Bootstrap 4.0.0-alpha6 / 3.3.7
