@@ -1,5 +1,6 @@
-# Bookstore
+# SE228 - Technology for Web Developing
 A naive web bookstore.
+
 ## Technique
 ### Front-End
 - Bootstrap 4.0.0-alpha6 / 3.3.7
@@ -17,7 +18,5 @@ A naive web bookstore.
 ## Configuration
 The configuration is in `src/main/resources`.
 
-## Guide
-You can register a new account to visit the bookstore. Please pay attention that the username cannot be duplicated.
-
-
+## Note
+Actually because of the time between last two iterations, the frameworks and UI style have changed a lot.
