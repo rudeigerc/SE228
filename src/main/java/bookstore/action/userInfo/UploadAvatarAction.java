@@ -3,7 +3,7 @@ package bookstore.action.userInfo;
 import bookstore.action.BaseAction;
 import bookstore.model.User;
 import bookstore.model.UserInfo;
-import bookstore.service.AppService;
+import bookstore.service.UserService;
 import org.apache.commons.io.IOUtils;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,12 +23,11 @@ public class UploadAvatarAction extends BaseAction {
     private String fileFileName;
     private String savePath;
     private String title;
+    private UserService userService;
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
-
-    private AppService appService;
 
     public File getFile() {
         return file;
@@ -83,10 +82,11 @@ public class UploadAvatarAction extends BaseAction {
 
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
-        User user = appService.getUserByUsername(username);
-        UserInfo userInfo = appService.getUserInfoByUid(user.getUid());
+        User user = userService.getUserByUsername(username);
+        UserInfo userInfo = userService.getUserInfoByUid(user.getUid());
         userInfo.setAvatar("/image/" + fileName);
-        appService.updateUserInfo(userInfo);
+        userService.updateUserInfo(userInfo);
         return SUCCESS;
     }
+
 }

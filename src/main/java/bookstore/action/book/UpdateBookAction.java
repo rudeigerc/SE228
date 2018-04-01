@@ -2,7 +2,7 @@ package bookstore.action.book;
 
 import bookstore.action.BaseAction;
 import bookstore.model.Book;
-import bookstore.service.AppService;
+import bookstore.service.BookService;
 
 /**
  * Created by rudeigerc on 2017/5/26.
@@ -19,7 +19,7 @@ public class UpdateBookAction extends BaseAction {
     private String price;
     private String description;
     private int inventory;
-    private AppService appService;
+    private BookService bookService;
 
     public String getTitle() {
         return title;
@@ -93,13 +93,13 @@ public class UpdateBookAction extends BaseAction {
         this.inventory = inventory;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @Override
     public String execute() throws Exception {
-        Book book = appService.getBookByISBN(isbn);
+        Book book = bookService.getBookByISBN(isbn);
         book.setTitle(title);
         book.setAuthor(author);
         book.setIsbn(isbn);
@@ -109,7 +109,9 @@ public class UpdateBookAction extends BaseAction {
         book.setPrice(price);
         book.setDescription(description);
         book.setInventory(inventory);
-        appService.updateBook(book);
+        bookService.updateBook(book);
         return SUCCESS;
     }
+
+
 }

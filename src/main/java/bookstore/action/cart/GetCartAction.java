@@ -2,7 +2,7 @@ package bookstore.action.cart;
 
 import bookstore.action.BaseAction;
 import bookstore.model.Book;
-import bookstore.service.AppService;
+import bookstore.service.BookService;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpSession;
@@ -20,7 +20,7 @@ public class GetCartAction extends BaseAction {
 
     private String json;
 
-    private AppService appService;
+    private BookService bookService;
 
     public String getJson() {
         return json;
@@ -30,8 +30,8 @@ public class GetCartAction extends BaseAction {
         this.json = json;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class GetCartAction extends BaseAction {
             map = (Map<String, Integer>) session.getAttribute("cart");
             for (Map.Entry<String, Integer> entry : map.entrySet()) {
                 String isbn = entry.getKey();
-                Book book = appService.getBookByISBN(isbn);
+                Book book = bookService.getBookByISBN(isbn);
                 String _book = gson.toJson(book);
                 _book = _book.substring(0, _book.length() - 1);
                 Integer amount = entry.getValue();
@@ -55,5 +55,6 @@ public class GetCartAction extends BaseAction {
         json = gson.toJson(list);
         return SUCCESS;
     }
+
 
 }

@@ -11,7 +11,8 @@
        http://www.springframework.org/schema/tx/spring-tx.xsd
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop.xsd
-       http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+       http://www.springframework.org/schema/data/mongo
+       http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
     <mongo:mongo-client id="mongo" host="localhost" port="27017">
         <mongo:client-options connections-per-host="8"
@@ -76,13 +77,21 @@
         <property name="mongoTemplate" ref="mongoTemplate" />
     </bean>
 
-
-    <bean id="appService" class="bookstore.service.impl.AppServiceImpl">
-        <property name="bookDao" ref="bookDao" />
+    <bean id="userService" class="bookstore.service.impl.UserServiceImpl">
         <property name="userDao" ref="userDao" />
-        <property name="orderDao" ref="orderDao" />
-        <property name="orderItemDao" ref="orderItemDao" />
         <property name="userInfoDao" ref="userInfoDao" />
+    </bean>
+
+    <bean id="bookService" class="bookstore.service.impl.BookServiceImpl">
+        <property name="bookDao" ref="bookDao" />
+    </bean>
+
+    <bean id="orderService" class="bookstore.service.impl.OrderServiceImpl">
+        <property name="orderDao" ref="orderDao" />
+    </bean>
+
+    <bean id="orderItemService" class="bookstore.service.impl.OrderItemServiceImpl">
+        <property name="orderItemDao" ref="orderItemDao" />
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager"
@@ -90,13 +99,13 @@
 
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
-            <tx:method name="get*" read-only="true" />
+            <tx:method name="get*" read-only="true" isolation="SERIALIZABLE" />
             <tx:method name="*" />
         </tx:attributes>
     </tx:advice>
 
     <aop:config>
-        <aop:pointcut id="beanPointcut" expression="bean(appService)" />
+        <aop:pointcut id="beanPointcut" expression="execution(* *..*Service.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="beanPointcut" />
     </aop:config>
 </beans>

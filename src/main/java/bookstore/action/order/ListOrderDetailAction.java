@@ -2,7 +2,7 @@ package bookstore.action.order;
 
 import bookstore.action.BaseAction;
 import bookstore.model.OrderItem;
-import bookstore.service.AppService;
+import bookstore.service.OrderItemService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +17,7 @@ public class ListOrderDetailAction extends BaseAction {
     private static final long serialVersionUID = 1L;
 
     private int orderId;
-    private AppService appService;
+    private OrderItemService orderItemService;
     private String json;
 
     public int getOrderId() {
@@ -36,14 +36,13 @@ public class ListOrderDetailAction extends BaseAction {
         this.json = json;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setOrderItemService(OrderItemService orderItemService) {
+        this.orderItemService = orderItemService;
     }
-
 
     @Override
     public String execute() throws Exception {
-        List<OrderItem> data = appService.getOrderItemByOrderId(orderId);
+        List<OrderItem> data = orderItemService.getOrderItemByOrderId(orderId);
         Map<String, Object> orderItem = new HashMap<String, Object>();
         orderItem.put("data", data);
 
@@ -51,4 +50,5 @@ public class ListOrderDetailAction extends BaseAction {
         json = gson.toJson(orderItem);
         return SUCCESS;
     }
+
 }

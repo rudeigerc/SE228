@@ -2,7 +2,7 @@ package bookstore.action.order;
 
 import bookstore.action.BaseAction;
 import bookstore.model.Order;
-import bookstore.service.AppService;
+import bookstore.service.OrderService;
 
 
 /**
@@ -17,7 +17,7 @@ public class UpdateOrderAction extends BaseAction {
     private String time;
     private String total;
     private int status;
-    private AppService appService;
+    private OrderService orderService;
 
     public int getOrderId() {
         return orderId;
@@ -59,19 +59,21 @@ public class UpdateOrderAction extends BaseAction {
         this.status = status;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @Override
     public String execute() throws Exception {
-        Order order = appService.getOrderById(orderId);
+        Order order = orderService.getOrderById(orderId);
         order.setOrderId(orderId);
         order.setUsername(username);
         order.setTime(time);
         order.setTotal(total);
         order.setStatus(status);
-        appService.updateOrder(order);
+        orderService.updateOrder(order);
         return SUCCESS;
     }
+
+
 }

@@ -2,7 +2,7 @@ package bookstore.action.book;
 
 import bookstore.action.BaseAction;
 import bookstore.model.Book;
-import bookstore.service.AppService;
+import bookstore.service.BookService;
 import java.util.List;
 
 /**
@@ -11,17 +11,17 @@ import java.util.List;
 public class ListBookAction extends BaseAction{
     private static final long serialVersionUID = 1L;
 
-    private AppService appService;
+    private BookService bookService;
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @Override
     public String execute() throws Exception {
-
-        List<Book> books = appService.getAllBooks();
+        List<Book> books = bookService.getAllBooks();
         request().setAttribute("books", books);
         return SUCCESS;
     }
+
 }

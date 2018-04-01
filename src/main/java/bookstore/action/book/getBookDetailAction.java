@@ -2,7 +2,7 @@ package bookstore.action.book;
 
 import bookstore.action.BaseAction;
 import bookstore.model.Book;
-import bookstore.service.AppService;
+import bookstore.service.BookService;
 import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ public class getBookDetailAction extends BaseAction {
 
     private String isbn;
     private String json;
-    private AppService appService;
+    private BookService bookService;
 
     public String getIsbn() {
         return isbn;
@@ -34,17 +34,19 @@ public class getBookDetailAction extends BaseAction {
         this.json = json;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @Override
     public String execute() throws Exception {
-        Book book = appService.getBookByISBN(isbn);
+        Book book = bookService.getBookByISBN(isbn);
         Map<String, Object> _book = new HashMap<String, Object>();
         _book.put("book", book);
         Gson gson = new Gson();
         json = gson.toJson(_book);
         return SUCCESS;
     }
+
+
 }

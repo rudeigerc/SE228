@@ -355,6 +355,7 @@
 <script src="<%=request.getContextPath()%>/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
 <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/jsencrypt.min.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function() {
@@ -460,12 +461,20 @@
                         json.push(object);
                     });
                     var str = JSON.stringify(json);
+
+                    var encrypt = new JSEncrypt();
+                    encrypt.setPublicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC6p4nhg04D0m6yPNzPGSAyxxrb" +
+                        "7M8CzGH6S1q0kw0ZXgqkeHr6w0XH6K9KlAohf6T1SHpkn29A407VfSAOz3h2ZiIh" +
+                        "s3YHc6aG80V9ijcTqFbe8W1rXUWTmZwKLMY+lzKfw30Lo1lPXBsQ5jJmvg1lXaxB" +
+                        "teB1lB45L6P0BkKW8wIDAQAB");
+                    const billing = encrypt.encrypt("BILLING");
                     $.ajax({
                         url: "createOrder",
                         type: "post",
                         data: {
                             json: str,
-                            total: total.toString()
+                            total: total.toString(),
+                            billing: billing
                         },
                         success: function() {
                             alert("The order was created.");

@@ -118,6 +118,12 @@
                 <param name="root">json</param>
             </result>
         </action>
+        <action name="validate" class="bookstore.action.auth.AdminValidateAction">
+            <result name="success" type="json">
+                <param name="root">json</param>
+                <param name="includeProperties">status</param>
+            </result>
+        </action>
         <!-- User -->
         <action name="user" class="bookstore.action.user.ListUserAction">
             <result name="success">/WEB-INF/admin/user.jsp</result>
@@ -163,6 +169,12 @@
             <result name="success" type="json">
                 <param name="root">json</param>
                 <param name="includeProperties">isbn, quantity, price</param>
+            </result>
+        </action>
+        <action name="status" class="bookstore.action.order.GetStatusAction">
+            <result name="success" type="json">
+                <param name="root">json</param>
+                <param name="includeProperties">status</param>
             </result>
         </action>
 

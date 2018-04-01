@@ -3,7 +3,7 @@ package bookstore.action.userInfo;
 import bookstore.action.BaseAction;
 import bookstore.model.User;
 import bookstore.model.UserInfo;
-import bookstore.service.AppService;
+import bookstore.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,8 +17,9 @@ public class UpdateUserInfoAction extends BaseAction {
     private String email;
     private String name;
     private String address;
+    private int age;
 
-    private AppService appService;
+    private UserService userService;
 
     public String getPhone() {
         return phone;
@@ -52,24 +53,33 @@ public class UpdateUserInfoAction extends BaseAction {
         this.address = address;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     public String execute() throws Exception {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
-        User user = appService.getUserByUsername(username);
+        User user = userService.getUserByUsername(username);
         int uid = user.getUid();
-        UserInfo userInfo = appService.getUserInfoByUid(uid);
+        UserInfo userInfo = userService.getUserInfoByUid(uid);
 
         user.setEmail(email);
         user.setPhone(phone);
         userInfo.setName(name);
         userInfo.setAddress(address);
+        userInfo.setAge(age);
 
-        appService.updateUserInfo(userInfo);
-        appService.updateUser(user);
+        userService.updateUserInfo(userInfo);
+        userService.updateUser(user);
 
         return SUCCESS;
     }

@@ -1,8 +1,6 @@
 package bookstore.action.cart;
 
 import bookstore.action.BaseAction;
-import bookstore.service.AppService;
-
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +14,6 @@ public class AddToCartAction extends BaseAction {
 
     private String isbn;
     private Integer amount;
-    private AppService appService;
 
     public String getIsbn() {
         return isbn;
@@ -34,9 +31,6 @@ public class AddToCartAction extends BaseAction {
         this.amount = amount;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
-    }
 
     @Override
     public String execute() throws Exception {

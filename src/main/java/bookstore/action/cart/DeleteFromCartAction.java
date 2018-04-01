@@ -1,7 +1,6 @@
 package bookstore.action.cart;
 
 import bookstore.action.BaseAction;
-import bookstore.service.AppService;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -16,18 +15,12 @@ public class DeleteFromCartAction extends BaseAction {
 
     private String isbn;
 
-    private AppService appService;
-
     public String getIsbn() {
         return isbn;
     }
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
-    }
-
-    public void setAppService(AppService appService) {
-        this.appService = appService;
     }
 
     @Override

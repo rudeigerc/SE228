@@ -51,7 +51,7 @@ public class BookDaoImpl extends HibernateDaoSupport implements BookDao {
 
     public List<Book> getAllBooks() {
         @SuppressWarnings("unchecked")
-        List<Book> books = (List<Book>) getHibernateTemplate().find("from Book");
+        List<Book> books = (List<Book>) getHibernateTemplate().find("from Book as book where book.category != 'Adult'");
         return books;
     }
 

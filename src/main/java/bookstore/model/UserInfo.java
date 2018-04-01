@@ -13,14 +13,16 @@ public class UserInfo {
     private String avatar;
     private String name;
     private String address;
+    private int age;
 
     public UserInfo() {};
 
-    public UserInfo(int uid, String avatar, String name, String address) {
+    public UserInfo(int uid, String avatar, String name, String address, int age) {
         this.uid = uid;
         this.avatar = avatar;
         this.name = name;
         this.address = address;
+        this.age = age;
     }
 
 
@@ -56,4 +58,11 @@ public class UserInfo {
         this.address = address;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 }

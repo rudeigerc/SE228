@@ -1,7 +1,14 @@
 package bookstore.action;
 
 import bookstore.model.Book;
-import bookstore.service.AppService;
+import bookstore.model.User;
+import bookstore.model.UserInfo;
+import bookstore.permission.AdultPermission;
+import bookstore.service.BookService;
+import bookstore.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.List;
 
 /**
@@ -10,9 +17,9 @@ import java.util.List;
 public class IndexAction extends BaseAction {
     private static final long serialVersionUID = 1L;
 
-    String category;
+    private String category;
 
-    String keyword;
+    private String keyword;
 
     public String getCategory() {
         return category;
@@ -30,27 +37,52 @@ public class IndexAction extends BaseAction {
         this.keyword = keyword;
     }
 
-    private AppService appService;
+    private UserService userService;
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    private BookService bookService;
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @Override
     public String execute() throws Exception {
+        System.setProperty("java.security.policy", "/Users/rudeigerc/Developer/bookstore/src/main/java/bookstore/permission/Permission.policy");
+        System.setSecurityManager(new SecurityManager());
+        AdultPermission permission = new AdultPermission(category, "list");
+        SecurityManager manager = System.getSecurityManager();
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userService.getUserByUsername(username);
+        UserInfo info = userService.getUserInfoByUid(user.getUid());
+        if (info.getAge() < 18) {
+            try {
+                if (manager != null) manager.checkPermission(permission);
+            } catch (SecurityException e) {
+                return ERROR;
+            }
+        }
+
         List<Book> books;
         if (category != null && keyword == null) {
-            books = appService.getBookByCategory(category);
+            books = bookService.getBookByCategory(category);
         }
         else if (keyword != null && category == null) {
-            books = appService.getBookByKeyword(keyword);
+            books = bookService.getBookByKeyword(keyword);
         }
         else {
-            books = appService.getAllBooks();
+            books = bookService.getAllBooks();
         }
-        List<String> categories = appService.getAllCatagories();
+        List<String> categories = bookService.getAllCatagories();
         request().setAttribute("books", books);
         request().setAttribute("categories", categories);
         return SUCCESS;
     }
+
+
 }

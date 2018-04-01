@@ -2,7 +2,7 @@ package bookstore.action.orderItem;
 
 import bookstore.action.BaseAction;
 import bookstore.model.OrderItem;
-import bookstore.service.AppService;
+import bookstore.service.OrderItemService;
 /**
  * Created by rudeigerc on 2017/5/28.
  */
@@ -15,7 +15,7 @@ public class UpdateOrderItemAction extends BaseAction {
     private int quantity;
     private String price;
 
-    private AppService appService;
+    private OrderItemService orderItemService;
 
     public int getId() {
         return id;
@@ -57,19 +57,21 @@ public class UpdateOrderItemAction extends BaseAction {
         this.price = price;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setOrderItemService(OrderItemService orderItemService) {
+        this.orderItemService = orderItemService;
     }
 
     @Override
     public String execute() throws Exception {
-        OrderItem orderItem = appService.getOrderItemById(id);
+        OrderItem orderItem = orderItemService.getOrderItemById(id);
         orderItem.setId(id);
         orderItem.setOrderId(orderId);
         orderItem.setIsbn(isbn);
         orderItem.setQuantity(quantity);
         orderItem.setPrice(price);
-        appService.updateOrderItem(orderItem);
+        orderItemService.updateOrderItem(orderItem);
         return SUCCESS;
     }
+
+
 }

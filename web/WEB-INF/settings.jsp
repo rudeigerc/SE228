@@ -72,6 +72,10 @@
                                         <h6><label for="address" class="form-control-label">Address</label></h6>
                                         <input type="text" class="form-control" id="address" name="address">
                                     </div>
+                                    <div class="form-group">
+                                        <h6><label for="address" class="form-control-label">Age</label></h6>
+                                        <input type="text" class="form-control" id="age" name="age">
+                                    </div>
                                     <button type="button" class="btn btn-warning" id="profile_submit">Edit</button>
                                 </form>
                             </div>
@@ -120,6 +124,15 @@
                             </div>
                             <button type="button" class="btn btn-warning" id="modify_password_submit">Update password</button>
                         </form>
+                        <div class="dropdown-divider"></div>
+                        <!-- payment details -->
+                        <h5 class="card-title card-danger-kai" style="margin-top: 12px;">
+                            <i class="fa fa-user-times" aria-hidden="true"></i>&nbsp;Payment details
+                        </h5>
+                        <div class="dropdown-divider"></div>
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Coming Soon...</strong>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -150,12 +163,14 @@
                     var address = json.userInfo.address;
                     var phone = json.phone;
                     var email = json.email;
+                    var age = json.userInfo.age;
                     var avatar = json.userInfo.avatar;
                     $('#username').val(username);
                     $('#name').val(name);
                     $('#address').val(address);
                     $('#phone').val(phone);
                     $('#email').val(email);
+                    $('#age').val(age);
                     $('#avatar').attr('src', "<%=request.getContextPath()%>" + avatar);
                 }
             });
@@ -168,7 +183,8 @@
                        email: $('#email').val(),
                        phone: $('#phone').val(),
                        name: $('#name').val(),
-                       address: $('#address').val()
+                       address: $('#address').val(),
+                       age: $('#age').val()
                    },
                    success: function () {
                        alert("Your profile was updated.");

@@ -41,6 +41,7 @@ public class UserInfoDaoImpl implements UserInfoDao {
         update.set("avatar", userInfo.getAvatar());
         update.set("name", userInfo.getName());
         update.set("address", userInfo.getAddress());
+        update.set("age", userInfo.getAge());
         mongoTemplate.updateFirst(query, update, UserInfo.class,"UserInfo");
     }
 

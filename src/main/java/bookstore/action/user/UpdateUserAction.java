@@ -2,7 +2,7 @@ package bookstore.action.user;
 
 import bookstore.action.BaseAction;
 import bookstore.model.User;
-import bookstore.service.AppService;
+import bookstore.service.UserService;
 
 /**
  * Created by rudeigerc on 2017/5/22.
@@ -17,7 +17,7 @@ public class UpdateUserAction extends BaseAction {
     private String email;
     private String role;
 
-    private AppService appService;
+    private UserService userService;
 
     public int getUid() {
         return uid;
@@ -67,19 +67,21 @@ public class UpdateUserAction extends BaseAction {
         this.role = role;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public String execute() throws Exception {
-        User user = appService.getUserByUid(uid);
+        User user = userService.getUserByUid(uid);
         user.setUsername(username);
         user.setPassword(password);
         user.setPhone(phone);
         user.setEmail(email);
         user.setRole(role);
-        appService.updateUser(user);
+        userService.updateUser(user);
         return SUCCESS;
     }
+
+
 }

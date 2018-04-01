@@ -2,7 +2,7 @@ package bookstore.action.order;
 
 import bookstore.action.BaseAction;
 import bookstore.model.Order;
-import bookstore.service.AppService;
+import bookstore.service.OrderService;
 
 /**
  * Created by rudeigerc on 2017/5/28.
@@ -15,7 +15,7 @@ public class AddOrderAction extends BaseAction {
     private String time;
     private String total;
     private int status;
-    private AppService appService;
+    private OrderService orderService;
 
     public int getOrderId() {
         return orderId;
@@ -49,14 +49,15 @@ public class AddOrderAction extends BaseAction {
         this.total = total;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @Override
     public String execute() throws Exception {
         Order order = new Order(username, time, total, 0);
-        appService.addOrder(order);
+        orderService.addOrder(order);
         return SUCCESS;
     }
+
 }

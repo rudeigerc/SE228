@@ -1,7 +1,7 @@
 package bookstore.action.stat;
 
 import bookstore.action.BaseAction;
-import bookstore.service.AppService;
+import bookstore.service.BookService;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class GetBookStatAction extends BaseAction {
 
     private String json;
 
-    private AppService appService;
+    private BookService bookService;
 
     public String getJson() {
         return json;
@@ -24,17 +24,16 @@ public class GetBookStatAction extends BaseAction {
         this.json = json;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @Override
     public String execute() throws Exception {
-        List<Object> stat = appService.getBookStat();
+        List<Object> stat = bookService.getBookStat();
         Gson gson = new Gson();
         json = gson.toJson(stat);
         return SUCCESS;
     }
-
 
 }

@@ -2,7 +2,7 @@ package bookstore.action.book;
 
 import bookstore.action.BaseAction;
 import bookstore.model.Book;
-import bookstore.service.AppService;
+import bookstore.service.BookService;
 
 import java.sql.Date;
 
@@ -21,7 +21,8 @@ public class AddBookAction extends BaseAction {
     private String price;
     private int inventory;
     private String description;
-    private AppService appService;
+
+    private BookService bookService;
 
     public String getTitle() {
         return title;
@@ -95,14 +96,16 @@ public class AddBookAction extends BaseAction {
         this.inventory = inventory;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @Override
     public String execute() throws Exception {
         Book book = new Book(title, author, isbn, publisher, publishedDate, category, price, description, inventory);
-        appService.addBook(book);
+        bookService.addBook(book);
         return SUCCESS;
     }
+
+
 }

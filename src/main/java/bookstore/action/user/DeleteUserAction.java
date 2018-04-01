@@ -3,7 +3,7 @@ package bookstore.action.user;
 import bookstore.action.BaseAction;
 import bookstore.model.User;
 import bookstore.model.UserInfo;
-import bookstore.service.AppService;
+import bookstore.service.UserService;
 
 /**
  * Created by rudeigerc on 2017/5/22.
@@ -13,7 +13,7 @@ public class DeleteUserAction extends BaseAction {
     private static final long serialVersionUID = 1L;
 
     private int uid;
-    private AppService appService;
+    private UserService userService;
 
     public int getUid() {
         return uid;
@@ -23,19 +23,18 @@ public class DeleteUserAction extends BaseAction {
         this.uid = uid;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public String execute() throws Exception {
-        User user = appService.getUserByUid(uid);
-        UserInfo userInfo = appService.getUserInfoByUid(uid);
-        appService.deleteUser(user);
-        appService.deleteUserInfo(userInfo);
+        User user = userService.getUserByUid(uid);
+        UserInfo userInfo = userService.getUserInfoByUid(uid);
+        userService.deleteUser(user);
+        userService.deleteUserInfo(userInfo);
         return SUCCESS;
     }
-
 
 
 }
