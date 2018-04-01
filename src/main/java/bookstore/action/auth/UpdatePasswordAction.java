@@ -2,7 +2,7 @@ package bookstore.action.auth;
 
 import bookstore.action.BaseAction;
 import bookstore.model.User;
-import bookstore.service.AppService;
+import bookstore.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,7 +15,7 @@ public class UpdatePasswordAction extends BaseAction {
 
     private String newRawPassword;
 
-    private AppService appService;
+    private UserService userService;
 
     public String getOriginalRawPassword() {
         return originalRawPassword;
@@ -33,22 +33,22 @@ public class UpdatePasswordAction extends BaseAction {
         this.newRawPassword = newRawPassword;
     }
 
-
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public String execute() throws Exception {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
-        User user = appService.getUserByUsername(username);
+        User user = userService.getUserByUsername(username);
         if (!originalRawPassword.equals(user.getPassword())) {
             return ERROR;
         } else {
             user.setPassword(newRawPassword);
-            appService.updateUser(user);
+            userService.updateUser(user);
             return SUCCESS;
         }
     }
+
 }

@@ -1,7 +1,7 @@
 package bookstore.action.auth;
 
 import bookstore.action.BaseAction;
-import bookstore.service.AppService;
+import bookstore.service.UserService;
 
 /**
  * Created by rudeigerc on 2017/7/17.
@@ -10,7 +10,7 @@ public class ValidateAction extends BaseAction {
 
     private String username;
 
-    private AppService appService;
+    private UserService userService;
 
     public String getUsername() {
         return username;
@@ -20,18 +20,17 @@ public class ValidateAction extends BaseAction {
         this.username = username;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public String execute() throws Exception {
-        if (appService.getUserByUsername(username) == null) {
+        if (userService.getUserByUsername(username) == null) {
             return SUCCESS;
         } else {
             return ERROR;
         }
     }
-
 
 }

@@ -3,7 +3,7 @@ package bookstore.action.auth;
 import bookstore.action.BaseAction;
 import bookstore.model.User;
 import bookstore.model.UserInfo;
-import bookstore.service.AppService;
+import bookstore.service.UserService;
 
 /**
  * Created by rudeigerc on 2017/5/30.
@@ -16,7 +16,7 @@ public class SignUpAction extends BaseAction {
     private String phone;
     private String email;
 
-    private AppService appService;
+    private UserService userService;
 
     public String getUsername() {
         return username;
@@ -50,17 +50,19 @@ public class SignUpAction extends BaseAction {
         this.email = email;
     }
 
-    public void setAppService(AppService appService) {
-        this.appService = appService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public String execute() throws Exception {
         User user = new User(username, password, phone, email, "ROLE_USER");
-        Integer uid = appService.addUser(user);
-        UserInfo userinfo = new UserInfo(uid, "", username, "");
-        appService.addUserInfo(userinfo);
+        Integer uid = userService.addUser(user);
+        UserInfo userinfo = new UserInfo(uid, "", username, "", 0);
+        userService.addUserInfo(userinfo);
         return SUCCESS;
 
     }
+
+
 }
