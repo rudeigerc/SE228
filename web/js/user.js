@@ -102,35 +102,53 @@ $(document).ready(function() {
     });
 
     $('#info_submit').click(function () {
-        var form_data = $('#user_form').serialize();
-        var uid = form_data.replace(/^uid=|&.*/g, "");
-        if (uid == "") {
+        var prompt = window.prompt("Please input admin password.", "");
+        if (prompt != null) {
+            $("#add").removeAttr("data-target");
             $.ajax({
-                url: "addUser",
-                data: form_data,
+                url: "validate",
+                data: {
+                    "username": "admin",
+                    "password": prompt
+                },
+                dataType : "text",
                 type: "post",
                 success: function (data) {
-                    reset_all();
-                    $('#info_modal').modal('hide');
-                    location.reload();
+                    const status = JSON.parse(JSON.parse(data)).status;
+                    if (status === "success") {
+                        var form_data = $('#user_form').serialize();
+                        var uid = form_data.replace(/^uid=|&.*/g, "");
+                        if (uid == "") {
+                            $.ajax({
+                                url: "addUser",
+                                data: form_data,
+                                type: "post",
+                                success: function (data) {
+                                    reset_all();
+                                    $('#info_modal').modal('hide');
+                                    location.reload();
+                                }
+                            })
+                        }
+
+                        else {
+                            $.ajax({
+                                url: "updateUser",
+                                data: form_data,
+                                type: "post",
+                                success: function (data) {
+                                    reset_all();
+                                    $('#info_modal').modal('hide');
+                                    location.reload();
+                                }
+                            })
+                        }
+                    } else {
+                        window.alert("Permission denied.");
+                    }
                 }
-            })
+            });
         }
-
-        else {
-            $.ajax({
-                url: "updateUser",
-                data: form_data,
-                type: "post",
-                success: function (data) {
-                    reset_all();
-                    $('#info_modal').modal('hide');
-                    location.reload();
-                }
-            })
-        }
-
-
     });
 
 

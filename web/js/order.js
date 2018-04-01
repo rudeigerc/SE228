@@ -16,7 +16,8 @@ $(document).ready(function() {
         '<button type="button" class="btn btn-success" id="add" data-toggle="modal" name="add">Add</button> ' +
         '<button type="button" class="btn btn-warning" id="edit" data-toggle="modal" disabled="disabled" name="edit">Edit</button> ' +
         '<button type="button" class="btn btn-danger" id="delete" disabled="disabled" name="delete">Delete</button> ' +
-        '<button type="button" class="btn btn-info" id="detail" disabled="disabled" name="detail" data-toggle="modal" data-target="#orderItem_modal">Detail</button>'
+        '<button type="button" class="btn btn-info" id="detail" disabled="disabled" name="detail" data-toggle="modal" data-target="#orderItem_modal">Detail</button> ' +
+        '<button type="button" class="btn btn-primary" id="status" disabled="disabled" name="status">Status</button>'
     );
 
     function reset_all() {
@@ -44,12 +45,14 @@ $(document).ready(function() {
             $('#edit').attr("disabled", "disabled");
             $('#delete').attr("disabled", "disabled");
             $('#detail').attr("disabled", "disabled");
+            $('#status').attr("disabled", "disabled");
             $(this).removeClass('selected');
         }
         else {
             $('#edit').attr("disabled", false);
             $('#delete').attr("disabled", false);
             $('#detail').attr("disabled", false);
+            $('#status').attr("disabled", false);
             table.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
         }
@@ -163,5 +166,18 @@ $(document).ready(function() {
                 $( api.column(2).footer() ).html("$" + total);
             }
         } );
+    });
+
+    $('#status').click( function () {
+        var row = get_selected_row();
+        $.ajax({
+            url: "status",
+            data: { "orderId": row.orderId },
+            type: "post",
+            success: function (data) {
+                const status = JSON.parse(data).status;
+                window.alert(status);
+            }
+        });
     });
 } );
