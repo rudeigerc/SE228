@@ -17,6 +17,3 @@ A naive web bookstore.
 
 ## Configuration
 The configuration is in `src/main/resources`.
-
-## Note
-Actually because of the time between last two iterations, the frameworks and UI style have changed a lot.
