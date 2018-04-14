@@ -23,6 +23,17 @@
         </global-exception-mappings>
     </package>
 
+    <package name="default" namespace="/" extends="struts-default">
+        <interceptors>
+            <interceptor name="xssInterceptor" class="bookstore.interceptor.XssInterceptor" />
+            <interceptor-stack name="default">
+                <interceptor-ref name="xssInterceptor" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="default" />
+    </package>
+
     <package name="index" namespace="/" extends="json-default">
         <action name="index" class="bookstore.action.IndexAction">
             <result>/WEB-INF/index.jsp</result>

@@ -55,6 +55,7 @@ grant {
     permission java.io.FilePermission "/Users/rudeigerc/Library/Caches/IntelliJIdea2018.1/tomcat/-", "read, write, delete";
     permission java.io.FilePermission "/usr/local/Cellar/tomcat/-", "read";
     permission java.io.FilePermission "/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/-", "read";
+    permission java.io.FilePermission "/Users/rudeigerc/Developer/bookstore/-", "write";
 
     permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
     permission java.util.logging.LoggingPermission "control";
@@ -71,5 +72,6 @@ grant {
     permission bookstore.permission.AdultPermission "Adult", "restrict";
 
     permission javax.management.MBeanServerPermission "*";
-    permission javax.management.MBeanPermission "*", "unregisterMBean";
+    permission javax.management.MBeanPermission "*", "unregisterMBean, queryNames";
+    permission java.sql.SQLPermission "deregisterDriver";
 };

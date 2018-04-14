@@ -33,7 +33,7 @@
         <property name="driverClass" value="com.mysql.cj.jdbc.Driver" />
         <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/bookstore?useSSL=false" />
         <property name="user" value="root" />
-        <property name="password" value="" />
+        <property name="password" value="rudeiger0022" />
         <property name="maxPoolSize" value="40" />
         <property name="minPoolSize" value="1" />
         <property name="initialPoolSize" value="1" />
@@ -99,13 +99,15 @@
 
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
-            <tx:method name="get*" read-only="true" isolation="SERIALIZABLE" />
+            <tx:method name="get*" read-only="true" isolation="DEFAULT" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRES_NEW"/>
+            <tx:method name="find*" propagation="SUPPORTS"/>
             <tx:method name="*" />
         </tx:attributes>
     </tx:advice>
 
     <aop:config>
-        <aop:pointcut id="beanPointcut" expression="execution(* *..*Service.*(..))" />
+        <aop:pointcut id="beanPointcut" expression="execution(* bookstore.service.*Service.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="beanPointcut" />
     </aop:config>
 </beans>

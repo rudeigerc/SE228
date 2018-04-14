@@ -44,11 +44,9 @@ public class OrderConsumer {
                     Map<String, Object> data = gson.fromJson(record.value(), Map.class);
                     Order order = gson.fromJson((String) data.get("order"), Order.class);
                     @SuppressWarnings("unchecked")
-                    List<OrderItem> orderItems = gson.fromJson((String) data.get("orderItems"), new TypeToken<List<OrderItem>>() {
-                    }.getType());
+                    List<OrderItem> orderItems = gson.fromJson((String) data.get("orderItems"), new TypeToken<List<OrderItem>>(){}.getType());
                     @SuppressWarnings("unchecked")
-                    List<Book> books = gson.fromJson((String) data.get("books"), new TypeToken<List<Book>>() {
-                    }.getType());
+                    List<Book> books = gson.fromJson((String) data.get("books"), new TypeToken<List<Book>>(){}.getType());
 
                     Integer orderId = orderService.addOrder(order);
                     for (OrderItem orderItem : orderItems) {
