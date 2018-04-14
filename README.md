@@ -16,8 +16,3 @@ A naive web bookstore.
 
 ## Configuration
 The configuration is in `src/main/resources`.
-
-## Guide
-You can register a new account to visit the bookstore. Please pay attention that the username cannot be duplicated.
-
-

@@ -72,6 +72,7 @@
                             %>
                         </ul>
                     </li>
+                    <li><a href="<%=request.getContextPath()%>/chatroom">Chatroom</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right navbar-form">
                     <div class="input-group">
@@ -143,6 +144,7 @@
                             %>
                         </ul>
                     </li>
+                    <li><a href="<%=request.getContextPath()%>/chatroom">Chatroom</a></li>
                 </ul>
                 <form class="navbar-form navbar-right">
                     <button type="button" class="btn btn-default" id="btn-cart" data-toggle="modal" data-target="#cart_modal">
