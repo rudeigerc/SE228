@@ -61,6 +61,23 @@
         </property>
     </bean>
 
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+          p:sessionFactory-ref="sessionFactory" />
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true" isolation="DEFAULT" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRES_NEW"/>
+            <tx:method name="find*" propagation="SUPPORTS"/>
+            <tx:method name="*" />
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="beanPointcut" expression="execution(* bookstore.service.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="beanPointcut" />
+    </aop:config>
+
     <bean id="bookDao" class="bookstore.dao.impl.BookDaoImpl">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
@@ -109,23 +126,6 @@
         <property name="userInfoDao" ref="userInfoDao" />
     </bean>
 
-    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager"
-          p:sessionFactory-ref="sessionFactory" />
-
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="get*" read-only="true" isolation="DEFAULT" propagation="REQUIRED" />
-            <tx:method name="update*" propagation="REQUIRES_NEW"/>
-            <tx:method name="find*" propagation="SUPPORTS"/>
-            <tx:method name="*" />
-        </tx:attributes>
-    </tx:advice>
-
-    <aop:config>
-        <aop:pointcut id="beanPointcut" expression="execution(* bookstore.service.*.*(..))" />
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="beanPointcut" />
-    </aop:config>
-
     <bean id="bookstoreAspect" class="bookstore.aop.BookstoreAspect" />
 
     <aop:config>
@@ -136,4 +136,100 @@
         </aop:aspect>
     </aop:config>
 
+    <!-- MySQL Cluster -->
+    <!-- Read -->
+    <bean id="dataSourceR" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.cj.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3307/bookstore?useSSL=false" />
+        <property name="user" value="root" />
+        <property name="password" value="" />
+        <property name="maxPoolSize" value="40" />
+        <property name="minPoolSize" value="1" />
+        <property name="initialPoolSize" value="1" />
+        <property name="maxIdleTime" value="20" />
+    </bean>
+
+    <bean id="sessionFactoryR" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+          p:dataSource-ref="dataSourceR">
+        <property name="mappingResources">
+            <list>
+                <value>hbm.xml/Book.hbm.xml</value>
+                <value>hbm.xml/Order.hbm.xml</value>
+                <value>hbm.xml/OrderItem.hbm.xml</value>
+                <value>hbm.xml/User.hbm.xml</value>
+            </list>
+        </property>
+        <!-- Hibernate SessionFactory -->
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+                hibernate.hbm2ddl.auto=update
+                hibernate.show_sql=false
+                hibernate.format_sql=true
+            </value>
+        </property>
+    </bean>
+
+    <bean id="transactionManagerR" class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+          p:sessionFactory-ref="sessionFactoryR" />
+
+    <tx:advice id="txAdviceR" transaction-manager="transactionManagerR">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true" isolation="DEFAULT" propagation="REQUIRED" />
+            <tx:method name="find*" propagation="SUPPORTS"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="beanPointcutR" expression="execution(* bookstore.service.*.*(..))" />
+        <aop:advisor advice-ref="txAdviceR" pointcut-ref="beanPointcutR" />
+    </aop:config>
+
+    <!-- Write -->
+    <bean id="dataSourceW" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.cj.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3307/bookstore?useSSL=false" />
+        <property name="user" value="root" />
+        <property name="password" value="" />
+        <property name="maxPoolSize" value="40" />
+        <property name="minPoolSize" value="1" />
+        <property name="initialPoolSize" value="1" />
+        <property name="maxIdleTime" value="20" />
+    </bean>
+
+    <bean id="sessionFactoryW" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+          p:dataSource-ref="dataSourceW">
+        <property name="mappingResources">
+            <list>
+                <value>hbm.xml/Book.hbm.xml</value>
+                <value>hbm.xml/Order.hbm.xml</value>
+                <value>hbm.xml/OrderItem.hbm.xml</value>
+                <value>hbm.xml/User.hbm.xml</value>
+            </list>
+        </property>
+        <!-- Hibernate SessionFactory -->
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+                hibernate.hbm2ddl.auto=update
+                hibernate.show_sql=false
+                hibernate.format_sql=true
+            </value>
+        </property>
+    </bean>
+
+    <bean id="transactionManagerW" class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+          p:sessionFactory-ref="sessionFactoryW" />
+
+    <tx:advice id="txAdviceW" transaction-manager="transactionManagerW">
+        <tx:attributes>
+            <tx:method name="update*" propagation="REQUIRES_NEW"/>
+            <tx:method name="*" />
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="beanPointcutW" expression="execution(* bookstore.service.*.*(..))" />
+        <aop:advisor advice-ref="txAdviceW" pointcut-ref="beanPointcutW" />
+    </aop:config>
 </beans>
