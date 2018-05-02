@@ -5,10 +5,12 @@
         "http://struts.apache.org/dtds/struts-2.5.dtd">
 
 <struts>
+    <constant name="struts.custom.i18n.resources" value="bookstore" />
     <constant name="struts.i18n.encoding" value="UTF-8"/>
     <constant name="struts.objectFactory" value="spring" />
     <constant name="struts.devMode" value="false" />
     <constant name="struts.convention.classes.reload" value="true" />
+    <constant name="struts.action.excludePattern" value="ws://*"/>
 
     <package name="error" extends="struts-default">
         <global-results>
@@ -34,7 +36,7 @@
         <default-interceptor-ref name="default" />
     </package>
 
-    <package name="index" namespace="/" extends="json-default">
+    <package name="index" namespace="/" extends="struts-default, json-default">
         <action name="index" class="bookstore.action.IndexAction">
             <result>/WEB-INF/index.jsp</result>
         </action>
@@ -45,6 +47,19 @@
         </action>
         <action name="signUp" class="bookstore.action.auth.SignUpAction">
             <result>/WEB-INF/auth.jsp</result>
+        </action>
+        <action name="chatroom">
+            <result name="success">/WEB-INF/chatroom.jsp</result>
+        </action>
+        <action name="sendMsg" class="bookstore.action.chatroom.SendMsgAction">
+            <result name="success" type="json">
+                <param name="root">json</param>
+            </result>
+        </action>
+        <action name="getGroupChat" class="bookstore.action.chatroom.GetGroupChatAction">
+            <result name="success" type="json">
+                <param name="root">json</param>
+            </result>
         </action>
     </package>
 
@@ -209,6 +224,7 @@
         </action>
         -->
     </package>
+
 
 
 </struts>

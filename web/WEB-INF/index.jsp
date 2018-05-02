@@ -1,3 +1,4 @@
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page import="org.springframework.security.core.userdetails.UserDetails" %>
@@ -58,11 +59,11 @@
             </div>
             <div id="_navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="<%=request.getContextPath()%>/index">Home<span class="sr-only">(current)</span></a></li>
+                    <li><a href="<%=request.getContextPath()%>/index"><s:text name="bookstore.home" /><span class="sr-only">(current)</span></a></li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><s:text name="bookstore.category" /> <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="index">All</a></li>
+                            <li><a href="index"><s:text name="bookstore.all" /></a></li>
                             <%
                                 for (String category : categoryList) {
                             %>
@@ -72,13 +73,20 @@
                             %>
                         </ul>
                     </li>
-                    <li><a href="<%=request.getContextPath()%>/chatroom">Chatroom</a></li>
+                    <li><a href="<%=request.getContextPath()%>/chatroom"><s:text name="bookstore.chatroom" /></a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><s:text name="bookstore.language" /> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<%=request.getContextPath()%>/index?request_locale=en_US">English</a></li>
+                            <li><a href="<%=request.getContextPath()%>/index?request_locale=zh_CN">简体中文 </a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right navbar-form">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" id="keyword" name="keyword">
+                        <input type="text" class="form-control" placeholder="<s:text name="bookstore.search" />" id="keyword" name="keyword">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" id="search">Submit</button>
+                            <button type="button" class="btn btn-default" id="search"><s:text name="bookstore.submit" /></button>
                         </span>
                     </div>
                     <div class="btn-group" role="group">
@@ -94,20 +102,20 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="<%=request.getContextPath()%>/index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-                                    Home
+                                    <s:text name="bookstore.home" />
                                 </a></li>
                                 <% if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) { %>
                                 <li><a href="<%=request.getContextPath()%>/admin/admin"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-                                    Manage
+                                    <s:text name="bookstore.manage" />
                                 </a></li>
                                 <% } else if (authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) { %>
                                 <li><a href="<%=request.getContextPath()%>/settings"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
-                                    Settings
+                                    <s:text name="bookstore.settings" />
                                 </a></li>
                                 <% } %>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="<%=request.getContextPath()%>/logout"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-                                    Log out
+                                    <s:text name="bookstore.logout" />
                                 </a></li>
                             </ul>
                         </div>
@@ -130,11 +138,11 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="<%=request.getContextPath()%>/index">Home<span class="sr-only">(current)</span></a></li>
+                    <li><a href="<%=request.getContextPath()%>/index"><s:text name="bookstore.home" /><span class="sr-only">(current)</span></a></li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><s:text name="bookstore.category" /> <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="index">All</a></li>
+                            <li><a href="<%=request.getContextPath()%>/index"><s:text name="bookstore.all" /></a></li>
                             <%
                                 for (String category : categoryList) {
                             %>
@@ -144,15 +152,22 @@
                             %>
                         </ul>
                     </li>
-                    <li><a href="<%=request.getContextPath()%>/chatroom">Chatroom</a></li>
+                    <li><a href="<%=request.getContextPath()%>/chatroom"><s:text name="bookstore.chatroom" /></a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><s:text name="bookstore.language" /> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<%=request.getContextPath()%>/index?request_locale=en_US">English</a></li>
+                            <li><a href="<%=request.getContextPath()%>/index?request_locale=zh_CN">简体中文 </a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <form class="navbar-form navbar-right">
                     <button type="button" class="btn btn-default" id="btn-cart" data-toggle="modal" data-target="#cart_modal">
                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                         <span class="badge" id="cart_badge">{{ count }}</span>
                     </button>
-                    <a type="button" class="btn btn-success" href="<%=request.getContextPath()%>/auth">Log in</a>
-                    <a type="button" class="btn btn-primary" href="<%=request.getContextPath()%>/auth">Sign up</a>
+                    <a type="button" class="btn btn-success" href="<%=request.getContextPath()%>/auth"><s:text name="bookstore.login" /></a>
+                    <a type="button" class="btn btn-primary" href="<%=request.getContextPath()%>/auth"><s:text name="bookstore.signup" /></a>
                 </form>
             </div>
         </div>
@@ -173,8 +188,8 @@
                 <img class="first-slide" src="<%=request.getContextPath()%>/image/slide_bg1.png" alt="First slide">
                 <div class="container">
                     <div class="carousel-caption">
-                        <h1>Welcome to the bookstore!</h1>
-                        <p>This is a naive web bookstore.</p>
+                        <h1><s:text name="bookstore.slider.main" /></h1>
+                        <p><s:text name="bookstore.slider.sub" /></p>
                         <p><a class="btn btn-lg btn-primary" href="https://github.com/rudeigerc/SE228" role="button">View the Github project</a></p>
                     </div>
                 </div>

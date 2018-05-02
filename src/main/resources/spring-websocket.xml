@@ -8,13 +8,26 @@
        http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
     <websocket:handlers>
-        <websocket:mapping path="/chat" handler="chatroomHandler"/>
+        <websocket:mapping path="/chat" handler="chatroomHandler" />
         <websocket:handshake-interceptors>
-            <ref bean="chatroomInterceptor"/>
+            <ref bean="chatroomInterceptor" />
         </websocket:handshake-interceptors>
     </websocket:handlers>
 
-    <bean id="chatroomHandler" class="bookstore.socket.ChatroomWebSocketHandler" />
-    <bean id="chatroomInterceptor" class="bookstore.socket.ChatroomWebSocketInterceptor" />
+    <websocket:handlers>
+        <websocket:mapping path="/chat/sockjs" handler="chatroomHandler" />
+        <websocket:handshake-interceptors>
+            <ref bean="chatroomInterceptor" />
+        </websocket:handshake-interceptors>
+        <websocket:sockjs />
+    </websocket:handlers>
+
+    <bean id="chatroomHandler" class="bookstore.socket.ChatroomWebSocketHandler">
+        <property name="userDao" ref="userDao" />
+    </bean>
+
+    <bean id="chatroomInterceptor" class="bookstore.socket.ChatroomWebSocketInterceptor">
+        <property name="userDao" ref="userDao" />
+    </bean>
 
 </beans>
