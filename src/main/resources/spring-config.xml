@@ -76,6 +76,9 @@
     <bean id="userInfoDao" class="bookstore.dao.impl.UserInfoDaoImpl">
         <property name="mongoTemplate" ref="mongoTemplate" />
     </bean>
+    <bean id="groupChatDao" class="bookstore.dao.impl.GroupChatDaoImpl">
+        <property name="mongoTemplate" ref="mongoTemplate" />
+    </bean>
 
     <bean id="userService" class="bookstore.service.impl.UserServiceImpl">
         <property name="userDao" ref="userDao" />
@@ -94,6 +97,18 @@
         <property name="orderItemDao" ref="orderItemDao" />
     </bean>
 
+    <bean id="groupChatService" class="bookstore.service.impl.GroupChatServiceImpl">
+        <property name="userDao" ref="userDao" />
+        <property name="userInfoDao" ref="userInfoDao" />
+        <property name="groupChatDao" ref="groupChatDao" />
+        <property name="convertUtil" ref="convertUtil" />
+    </bean>
+
+    <bean id="convertUtil" class="bookstore.socket.ConvertUtil">
+        <property name="userDao" ref="userDao" />
+        <property name="userInfoDao" ref="userInfoDao" />
+    </bean>
+
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager"
           p:sessionFactory-ref="sessionFactory" />
 
@@ -107,7 +122,18 @@
     </tx:advice>
 
     <aop:config>
-        <aop:pointcut id="beanPointcut" expression="execution(* bookstore.service.*Service.*(..))" />
+        <aop:pointcut id="beanPointcut" expression="execution(* bookstore.service.*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="beanPointcut" />
     </aop:config>
+
+    <bean id="bookstoreAspect" class="bookstore.aop.BookstoreAspect" />
+
+    <aop:config>
+        <aop:aspect ref="bookstoreAspect">
+            <aop:pointcut id="pointcut" expression="execution(* bookstore.service.OrderService.deleteOrder(..)) and args(bookstore.model.Order)" />
+            <aop:before method="beforeDeleteOrder" pointcut-ref="pointcut" />
+            <aop:after method="afterDeleteOrder" pointcut="execution(* bookstore.service.OrderService.deleteOrder(..)) and args(order)" arg-names="order" />
+        </aop:aspect>
+    </aop:config>
+
 </beans>
