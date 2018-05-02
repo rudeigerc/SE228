@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class OrderConsumer {
 
@@ -29,6 +30,9 @@ public class OrderConsumer {
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Collections.singletonList("order"));
+
+        Logger logger = Logger.getLogger("bookstore");
+        logger.info("Order Consumer opened.");
 
         Gson gson = new Gson();
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");

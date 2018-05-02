@@ -1,7 +1,6 @@
 package bookstore.service;
 
 import bookstore.model.Order;
-
 import java.util.List;
 
 public interface OrderService {

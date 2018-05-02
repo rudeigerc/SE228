@@ -3,23 +3,37 @@ package bookstore.dao.impl;
 import bookstore.dao.BookDao;
 import bookstore.model.Book;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
+import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by rudeigerc on 2017/5/26.
  */
 public class BookDaoImpl extends HibernateDaoSupport implements BookDao {
+
+    private Jedis jedis = new Jedis("localhost", 6379);
+
     public void save(Book book) {
+        if (jedis.get("category") == null) {
+            jedis.del("category");
+        }
         getHibernateTemplate().save(book);
     }
 
     public void delete(Book book) {
+        if (jedis.get("category") == null) {
+            jedis.del("category");
+        }
         getHibernateTemplate().delete(book);
     }
 
     public void update(Book book) {
+        if (jedis.get("category") == null) {
+            jedis.del("category");
+        }
         getHibernateTemplate().merge(book);
     }
 
@@ -60,9 +74,18 @@ public class BookDaoImpl extends HibernateDaoSupport implements BookDao {
         return isbns;
     }
 
+    @SuppressWarnings("unchecked")
     public List<String> getAllCategories() {
-        @SuppressWarnings("unchecked")
-        List<String> categories = (List<String>) getHibernateTemplate().find("select distinct category from Book");
+        List<String> categories = null;
+        if (jedis.get("category") == null) {
+            categories = (List<String>) getHibernateTemplate().find("select distinct category from Book");
+            jedis.set("category", categories.toString());
+        } else {
+            String category = jedis.get("category");
+            String[] array = category.substring(1, category.length() - 1).split(", ");
+            categories = new ArrayList<>(Arrays.asList(array));
+        }
+
         return categories;
     }
 
